@@ -1,7 +1,7 @@
 /***********************************************************
  * Author: Wen Li
- * Date  : 11/08/2019
- * Describe: basic type define 
+ * Date  : 1/18/2020
+ * Describe: basic type definition
  * History:
    <1> 01/18/2020 , create
 ************************************************************/
@@ -21,6 +21,7 @@
 #include <memory.h>
 #include <stdlib.h>
 
+#ifndef _WINDOWS_
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -33,6 +34,7 @@
 #include <time.h>
 #include <limits.h>
 #include <unistd.h>
+#endif
 
 
 typedef unsigned char    BYTE;

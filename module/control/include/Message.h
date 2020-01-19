@@ -1,3 +1,10 @@
+/***********************************************************
+ * Author: Wen Li
+ * Date  : 1/18/2020
+ * Describe: message decode and encode
+ * History:
+   <1> 01/18/2020 , create
+************************************************************/
 
 #ifndef _MESAGE_H_
 #define _MESAGE_H_ 
