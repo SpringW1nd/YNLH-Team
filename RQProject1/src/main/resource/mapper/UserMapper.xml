@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--命名空间是对应接口的包名+类名 -->
+<mapper namespace="com.YNLH.park.dao.mapper.UserMapper">
+    <!-- paramerType：java自定义类型或数据类型-->
+    <insert id="insertUser" parameterType="User">
+        insert into user(uid,name,type) values (#{uid},#{name},#{type})
+    </insert>
+    <select id="selectAllUser" resultType="User">
+          select * from user
+    </select>
+</mapper>
