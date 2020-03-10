@@ -10,7 +10,7 @@
 		<input type="text" name="uid"/><br/>
 		<input type="text" name="name"/><br/>
 		<input type="text" name="type"/><br/>
-		<input type="submit" value="添加"/>
+		<input type="submit" value="add"/>
 	</form>
 </body>
 </html>
