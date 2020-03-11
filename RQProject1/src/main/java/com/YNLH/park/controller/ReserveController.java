@@ -2,6 +2,7 @@ package com.YNLH.park.controller;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,25 +24,26 @@ public class ReserveController {
 	private ParkService ParkSrv;
 	
 	@RequestMapping("/")
-	public ModelAndView Reserve(@RequestParam("PlateNumber") String PlateNumber, 
+	public ModelAndView Reserve(@RequestParam("UserId") int UserId,
+			                    @RequestParam("PlateNumber") String PlateNumber, 
 			                    @RequestParam("StartTime") Date StartTime,
 			                    @RequestParam("EndTime") Date EndTime) 
 	{
 		logger.info("Reserve:");
 		
-		Reservation Rev = ParkSrv.makeReservation(0, StartTime, EndTime, PlateNumber);
+		Reservation Rev = ParkSrv.makeReservation(UserId, StartTime, EndTime, PlateNumber);
 		if (Rev == null)
 		{
 			return new ModelAndView("Reserve", "Status", "Fail");
 		}
 		else
 		{	
-			return ReserveQuery (PlateNumber);
+			return ReserveQueryPn (PlateNumber);
 		}
 	}
 	
-	@RequestMapping("/query")
-	public ModelAndView ReserveQuery(@RequestParam("PlateNumber") String PlateNumber) 
+	@RequestMapping("/queryPN")
+	public ModelAndView ReserveQueryPn(@RequestParam("PlateNumber") String PlateNumber) 
 	{
 		System.out.println("ReserveQuery!!!!");
 		Reservation Rev = ParkSrv.findReservationByPlateNumber(PlateNumber);
@@ -53,6 +55,15 @@ public class ReserveController {
 		RevInfo.put("EndDate",     Rev.getEndDate()); 
 
         return new ModelAndView("RevInfo", RevInfo);
+	}
+	
+	@RequestMapping("/queryUser")
+	public ModelAndView ReserveQueryUser(@RequestParam("UserId") int UserId) 
+	{
+		System.out.println("ReserveQuery!!!!");
+		List<Reservation> RevList = ParkSrv.listReservation(UserId);
+
+        return new ModelAndView("queryUser", "ReserveList", RevList);
 	}
 	
 	@RequestMapping("/cancel")
