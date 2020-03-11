@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.YNLH.park.dao.entity.User;
 @Repository
 public interface UserMapper {
+	public int registerUser(User user);
 	public int insertUser(User user);
 	public List<User> selectAllUser();
 }

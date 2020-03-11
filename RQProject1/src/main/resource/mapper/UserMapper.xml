@@ -7,6 +7,9 @@
     <insert id="insertUser" parameterType="User">
         insert into user(uid,name,type) values (#{uid},#{name},#{type})
     </insert>
+    <insert id="registerUser" parameterType="User">
+        insert into user(uid,name,type,password) values (NULL,#{name},1,#{password})
+    </insert>
     <select id="selectAllUser" resultType="User">
           select * from user
     </select>

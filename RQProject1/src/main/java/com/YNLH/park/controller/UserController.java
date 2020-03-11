@@ -18,16 +18,36 @@ public class UserController {
 	private final static Logger logger = Logger.getLogger(UserController.class);
 	@Autowired//自动装配Service bean
 	private UserService userService;
+	
+	
+	
+	@RequestMapping("/registerUser")
+	public ModelAndView registerUser(@RequestParam("account") String account, @RequestParam("password") String password, @RequestParam("name") String name, @RequestParam("email") String email, @RequestParam("phone") String phone)
+	{
+		try
+		{
+			userService.registerUser(account, password,name,email,phone);
+		}
+		catch(Exception e)
+		{
+			return new ModelAndView("registerFail");
+		}
+		return new ModelAndView("registerSuccess");
+	}
+	
+	
 	@RequestMapping("/listAllUser")
 	public ModelAndView listAllUser() {
 		logger.info("list All User");
-		List<User> userList = userService.selectAllUser();
+		List<User> userList = userService.listUsers();
 		return new ModelAndView("queryUser","userList",userList);
 	}
+	/*
 	@RequestMapping("/insertUser")
 	public ModelAndView insertUser(@RequestParam("uid") int uid, @RequestParam("name") String name,@RequestParam("type") int type) {
 		logger.info("insert All User");
 		userService.insertUser(uid, name, type);
 		return new ModelAndView("success");
 	}
+	*/
 }
