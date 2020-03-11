@@ -4,19 +4,14 @@
 
 <web-app>
 	<display-name>YNLH-park</display-name>
-	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
-	</welcome-file-list>
-	<!-- a1加载Spring容器配置 -->
-	<listener>
-	    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
+	
 	<!-- a2设置Spring容器加载配置文件路径 -->
 	<context-param>
 	    <param-name>contextConfigLocation</param-name>
 	    <param-value>classpath:applicationContext.xml</param-value>
 	</context-param>
-	 <!-- character and filter -->
+	
+	<!-- character and filter -->
 	<filter>
 		<filter-name>characterEncoding</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -29,6 +24,12 @@
 		<filter-name>characterEncoding</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	
+	<!-- a1加载Spring容器配置 -->
+	<listener>
+	    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
 	<!-- load SpringMVC.xml -->
 	<servlet>
 		<servlet-name>springDispatcherServlet</servlet-name>
@@ -45,4 +46,8 @@
 		<servlet-name>springDispatcherServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>	
+	
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
 </web-app>
