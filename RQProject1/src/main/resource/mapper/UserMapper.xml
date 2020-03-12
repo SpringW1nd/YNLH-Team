@@ -4,13 +4,17 @@
 <!--命名空间是对应接口的包名+类名 -->
 <mapper namespace="com.YNLH.park.dao.mapper.UserMapper">
     <!-- paramerType：java自定义类型或数据类型-->
-    <insert id="insertUser" parameterType="User">
-        insert into user(uid,name,type) values (#{uid},#{name},#{type})
-    </insert>
     <insert id="registerUser" parameterType="User">
-        insert into user(uid,name,type,password) values (NULL,#{name},1,#{password})
+        insert into User(uid,account,password,name,email,phone) values (NULL,#{account},#{password},#{name},#{email},#{phone})
     </insert>
-    <select id="selectAllUser" resultType="User">
-          select * from user
+    <select id="findUserById" resultType="User">
+          select * from User where User.uid = #{uid}
     </select>
+    <select id="findUser" resultType="User">
+          select * from User where User.account = #{account}
+    </select>
+    <select id="login" resultType="User">
+          select * from User where (User.account =#{account} and User.password = #{password})
+    </select>
+    
 </mapper>

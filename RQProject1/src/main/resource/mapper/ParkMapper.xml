@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--命名空间是对应接口的包名+类名 -->
+<mapper namespace="com.YNLH.park.dao.mapper.ParkMapper">
+    <!-- paramerType：java自定义类型或数据类型-->
+    
+    <insert id="addPlateNumber" parameterType="registerPlateNumber">
+        insert into registerPlateNumber(pid,uid,plateNumber) values (NULL,#{uid},#{plateNumber})
+    </insert>
+    
+     <select id="listRegisterPlateNumber" resultType="RegisterPlateNumber">
+          select * from RegisterPlateNumber where RegisterPlateNumber.uid = #{uid}
+    </select>
+    
+    <select id="findRegisterPlateNumber" resultType="RegisterPlateNumber">
+          select * from RegisterPlateNumber where RegisterPlateNumber.plateNumber = #{plateNumber}
+    </select>
+    
+    <insert id="makeReservation" parameterType="Reservation">
+        insert into Reservation(uid,rStartDate,rEndDate,plateNumber) values (#{uid},#{rStartDate},#{rEndDate},#{plateNumber})
+    </insert>
+    
+    <select id="listReservation" resultType="Reservation">
+          select * from Reservation where Reservation.uid = #{uid}
+    </select>
+    	
+     <select id="findReservation" resultType="Reservation">
+          select * from Reservation where Reservation.rid = #{rid}
+    </select>
+    
+    <select id="findReservationByPlateNumber" resultType="Reservation">
+         select * from Reservation where Reservation.plateNumber = #{plateNumber}
+    </select>
+    
+    <delete id = "cancelReservation" >
+    	delete from Reservation where Reservation.rid = #{rid}
+    </delete>
+    
+     <insert id="addRegisterBill" parameterType="RegisterBill">
+        insert into RegisterBill(uid,rid,fee) values (#{uid},#{rid},#{fee})
+    </insert>
+    
+    <select id="listRegisterBill" resultType="RegisterBill">
+          select * from RegisterBill where RegisterBill.uid = #{uid}
+    </select>
+    
+    <select id="findRegisterBill" resultType="RegisterBill">
+          select * from RegisterBill where RegisterBill.rid = #{rid}
+    </select>
+    
+    <delete id = "deleteRegisterBill" >
+    	delete from Reservation where Reservation.rid = #{rid}
+    </delete>
+    
+    <insert id="addWalkInUser" parameterType="WalkInUser">
+        insert into WalkInUser(wid,plateNumber,wStartDate) values (NULL,#{plateNumber},#{wStartDate})
+    </insert>
+    
+    <select id="findWalkInUser" resultType="WalkInUser">
+          select * from WalkInUser where WalkInUser.plateNumber = #{plateNumber}
+    </select>
+    
+    
+    
+    
+    
+
+   
+</mapper>
