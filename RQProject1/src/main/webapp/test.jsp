@@ -7,7 +7,29 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>queryUsers</title>
 </head>
+
+
+
 <body>
+	<c:out value="${fee}"></c:out>
+	<table>
+	         <tr>
+	            <td><c:out value="${resv.rid}"></c:out></td>
+	            <td><c:out value="${resv.plateNumber}"></c:out></td>
+	            <td><c:out value="${resv.uid}"></c:out></td>
+	         </tr>
+      </table>
+      
+ <!--  
+	<table>
+	         <tr>
+	            <td><c:out value="${plate.pid}"></c:out></td>
+	            <td><c:out value="${plate.plateNumber}"></c:out></td>
+	            <td><c:out value="${plate.uid}"></c:out></td>
+	         </tr>
+      </table>
+      -->
+<!-- 
 	<table>
          <tr>
             <td>id</td>
@@ -17,7 +39,6 @@
             <td>email</td>
             <td>phone</td>
          </tr>
-         <c:forEach items="${userList}" var="user">
 	         <tr>
 	            <td><c:out value="${user.uid}"></c:out></td>
 	            <td><c:out value="${user.account}"></c:out></td>
@@ -26,7 +47,7 @@
 	            <td><c:out value="${user.email}"></c:out></td>
 	            <td><c:out value="${user.phone}"></c:out></td>
 	         </tr>
-         </c:forEach>
       </table>
+-->
 </body>
 </html>

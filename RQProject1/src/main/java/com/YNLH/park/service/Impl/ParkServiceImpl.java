@@ -6,15 +6,16 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Service;
 
 import com.YNLH.park.dao.entity.*;
 import com.YNLH.park.dao.mapper.*;
 import com.YNLH.park.service.*;
 
-
+@Service
 public class ParkServiceImpl implements ParkService{
 	//logger
-	private final static Logger logger = Logger.getLogger(UserServiceImpl.class);
+	private final static Logger logger = Logger.getLogger(ParkServiceImpl.class);
 	private ParkingSpace groundLevel;
 	private ParkingSpace higherLevel;
 	
@@ -44,7 +45,10 @@ public class ParkServiceImpl implements ParkService{
 		registerPlateNumber.setPlateNumber(plateNumber);
 		
 		int pid=0;
-		//pid = parkMapper.addPlateNumber(registerPlateNumber);		
+		try {
+			pid = parkMapper.addPlateNumber(registerPlateNumber);			//1 for success. 0 for fail. Not the actual pid 
+		}catch(Exception e) {}
+			
 		
 		registerPlateNumber.setPid(pid);
 		
@@ -58,7 +62,10 @@ public class ParkServiceImpl implements ParkService{
 		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
 		
 		List<RegisterPlateNumber> registerPlateNumbers=null;
-		//registerPlateNumbers=parkMapper.listRegisterPlateNumber(uid);
+		try{
+			registerPlateNumbers=parkMapper.listRegisterPlateNumber(uid);
+		}catch(Exception e) {}
+		
 		return registerPlateNumbers;
 		
 	}
@@ -69,7 +76,9 @@ public class ParkServiceImpl implements ParkService{
 		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
 		
 		RegisterPlateNumber registerPlateNumber=null;
-		//registerPlateNumber=parkMapper.findRegisterPlateNumber(String plateNumber);
+		try {
+			registerPlateNumber=parkMapper.findRegisterPlateNumber(plateNumber);
+		}catch(Exception e) {}
 		return registerPlateNumber;
 	}
 
@@ -86,13 +95,19 @@ public class ParkServiceImpl implements ParkService{
 			reservation.setEndDate(rEndDate);
 			reservation.setPlateNumber(plateNumber);
 			int rid=0;
-			//rid=parkMapper.makeReservation(reservation);
 			
-			this.addRegisterPlateNumber(uid, plateNumber);
+			try{
+				rid=parkMapper.makeReservation(reservation);		//rid=1 success, 0 fail
+			}catch(Exception e) {}
+			
+			//this.addRegisterPlateNumber(uid, plateNumber);
 			
 			this.higherLevel.setAvailableNum(higherLevel.getAvailableNum()-1);
 			
-			long minute=rStartDate.getTime()-rEndDate.getTime();
+			reservation=this.findReservationByPlateNumber(plateNumber);
+			rid=reservation.getRid();
+			
+			long minute=rEndDate.getTime()-rStartDate.getTime();
 			this.addRegisterBill(uid,rid,minute*0.02/1000.0/60.0);		//fee rate: 0.02
 			
 			return reservation;
@@ -106,7 +121,9 @@ public class ParkServiceImpl implements ParkService{
 		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
 		
 		List<Reservation> reservations=null;
-		//reservations=parkMapper.listReservation(uid);
+		try {
+			reservations=parkMapper.listReservation(uid);
+		}catch(Exception e) {}
 		return reservations;
 		
 	}
@@ -116,7 +133,9 @@ public class ParkServiceImpl implements ParkService{
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
 		Reservation reservation=null;
-		//reservation=parkMapper.findReservation(rid);
+		try {
+			reservation=parkMapper.findReservation(rid);
+		}catch(Exception e) {}
 		return reservation;
 	}
 	public Reservation findReservationByPlateNumber(String plateNumber)
@@ -124,7 +143,9 @@ public class ParkServiceImpl implements ParkService{
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
 		Reservation reservation=null;
-		//reservation=parkMapper.findReservationByPlateNumber(plateNumber);
+		try {
+			reservation=parkMapper.findReservationByPlateNumber(plateNumber);
+		}catch(Exception e) {}
 		return reservation;
 	}
 	
@@ -140,7 +161,9 @@ public class ParkServiceImpl implements ParkService{
 		{
 			this.higherLevel.setAvailableNum(higherLevel.getAvailableNum()+1);
 			this.deleteRegisterBill(rid);
-			//return parkMapper.cancelReservation(rid);
+			try {
+				parkMapper.cancelReservation(rid);
+			}catch(Exception e) {}
 		}
 		return true;
 	}
@@ -154,7 +177,9 @@ public class ParkServiceImpl implements ParkService{
 		registerBill.setFee(fee);
 		
 		int bid=0;
-		//bid=parkMapper.addRegisterBill(registerBill);
+		try {
+			bid=parkMapper.addRegisterBill(registerBill);
+		}catch(Exception e) {}
 		registerBill.setBid(bid);
 		return registerBill;
 		
@@ -165,7 +190,9 @@ public class ParkServiceImpl implements ParkService{
 		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
 		
 		List<RegisterBill> bills=null;
-		//bills=parkMapper.listRegisterBill(uid);
+		try{
+			bills=parkMapper.listRegisterBill(uid);
+		}catch(Exception e) {}
 		return bills;
 	}
 	public RegisterBill findRegisterBill(int rid)
@@ -173,7 +200,9 @@ public class ParkServiceImpl implements ParkService{
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
 		RegisterBill registerBill=null;
-		//registerBill=parkMapper.findRegisterBill(rid);
+		try{
+			registerBill=parkMapper.findRegisterBill(rid);
+		}catch(Exception e) {}
 		return registerBill;
 	}
 	
@@ -181,14 +210,18 @@ public class ParkServiceImpl implements ParkService{
 	{
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
-		if(findRegisterBill(rid)==null)
+		
+		/*if(findRegisterBill(rid)==null)
 		{
 			return false;
 		}
 		else
-		{
-			//return parkMapper.deleteRegisterBill(rid);
-		}
+		{	
+		*/
+		try {
+				parkMapper.deleteRegisterBill(rid);
+			}catch(Exception e) {}
+		//}
 		return true;
 	}
 	public boolean registerUserIn(String plateNumber,Date time)
@@ -220,13 +253,17 @@ public class ParkServiceImpl implements ParkService{
 		{
 			long diff=time.getTime()-reservation.getEndDate().getTime()/1000/60;
 			RegisterBill registerBill=this.findRegisterBill(reservation.getRid());
+			this.deleteRegisterBill(registerBill.getRid());
 			registerBill.setFee(registerBill.getFee()+0.03*diff);
+			this.addRegisterBill(registerBill.getUid(), registerBill.getRid(), registerBill.getFee());
 		}
 	}
 	public boolean payBill(int rid)
 	{
 		RegisterBill registerBill=this.findRegisterBill(rid);
+		this.deleteRegisterBill(rid);
 		registerBill.setFee(0);
+		this.addRegisterBill(registerBill.getUid(), registerBill.getRid(), registerBill.getFee());
 		return true;
 	}
 	
@@ -248,7 +285,9 @@ public class ParkServiceImpl implements ParkService{
 		walkInUser.setPlateNumber(plateNumber);
 		walkInUser.setStartDate(wStartDate);
 		int wid=0;
-		//wid=parkMapper.addWalkInUser(walkInUser);
+		try {
+			wid=parkMapper.addWalkInUser(walkInUser);
+		}catch(Exception e) {}
 		return walkInUser;
 		
 	}
@@ -259,7 +298,9 @@ public class ParkServiceImpl implements ParkService{
 		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
 		
 		WalkInUser walkInUser=null;
-		//walkInUser=parkMapper.findWalkInUser(plateNumber);
+		try{
+			walkInUser=parkMapper.findWalkInUser(plateNumber);
+		}catch(Exception e) {}
 		return walkInUser;
 		
 	}
@@ -270,8 +311,13 @@ public class ParkServiceImpl implements ParkService{
 		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
 		
 		WalkInUser walkInUser=findWalkInUser(plateNumber);
+		if(walkInUser==null)
+			return 0.0;
 		walkInUser.setEndDate(wEndDate);
-		double fee=walkInUser.getEndDate().getTime()-walkInUser.getStartDate().getTime()/1000.0/60.0*0.03; //0.03 fee rate
+		double fee=(walkInUser.getEndDate().getTime()-walkInUser.getStartDate().getTime())/1000.0/60.0*0.03; //0.03 fee rate
+		try {
+			parkMapper.deleteWalkInUser(walkInUser.getWid());
+		}catch(Exception e) {}
 		return fee;
 		
 	}

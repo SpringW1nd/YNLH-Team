@@ -14,7 +14,7 @@
           select * from User where User.account = #{account}
     </select>
     <select id="login" resultType="User">
-          select * from User where (User.account =#{account} and User.password = #{password})
+          select * from User where (User.account = #{account} and User.password = #{password})
     </select>
 <!-- 下面是鹏飞上次的xml, registeruser 和我之间写的重复了-->
 	 
@@ -22,14 +22,12 @@
     <insert id="insertUser" parameterType="User">
         insert into user(uid,name,type) values (#{uid},#{name},#{type})
     </insert>
-    <insert id="registerUser" parameterType="User">
+   <!-- <insert id="registerUser" parameterType="User">
         insert into user(uid,name,type,password) values (NULL,#{name},1,#{password})
-    </insert>
+    </insert> -->
 
     <select id="selectAllUser" resultType="User">
-
-          select * from user
-
+          select * from User
     </select>
     
 </mapper>

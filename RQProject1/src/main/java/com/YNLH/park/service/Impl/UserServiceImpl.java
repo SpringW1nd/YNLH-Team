@@ -50,12 +50,16 @@ public class UserServiceImpl implements UserService {
 		List<User> medialist = userMapper.selectAllUser();
 		return medialist;
 	}
-	public User findUser(String account)		
+	public User findUser(String account) 
 	{
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		UserMapper userMapper = ctx.getBean(UserMapper.class);
 		User user=null;
-		//user=userMapper.findUser(account);
+		try {
+			user=userMapper.findUser(account);
+		}
+		catch(Exception e)
+		{}
 		return user;
 	}
 	public User findUserById(int uid)
@@ -63,15 +67,25 @@ public class UserServiceImpl implements UserService {
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		UserMapper userMapper = ctx.getBean(UserMapper.class);
 		User user=null;
-		//user=userMapper.findUserById(uid);
+		try {
+			user=userMapper.findUserById(uid);
+		}
+		catch(Exception e) {}
 		return user;
 	}
-	public User login(String account, String password)		//return uid
+	public User login(String account, String password)		
 	{
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		UserMapper userMapper = ctx.getBean(UserMapper.class);
 		User user=null;
-		//user=userMapper.login(account,password);
+		User userx=new User();
+		userx.setAccount(account);
+		userx.setPassword(password);
+		try{
+			user=userMapper.login(userx);
+		}catch(Exception e) {
+			
+		}
 		return user;
 	}
 	

@@ -43,6 +43,37 @@ public class UserController {
 		return new ModelAndView("queryUser","userList",userList);
 	}
 	/*
+	@RequestMapping("/test")
+	public ModelAndView test(@RequestParam("account") String account, @RequestParam("password") String password)
+	{
+		User user=userService.login(account,password);
+		return new ModelAndView("test","user",user);
+	}/*
+	public ModelAndView test(@RequestParam("uid") String uid)
+	{
+		int i=Integer.parseInt(uid);
+		User user=userService.findUserById(i);
+		return new ModelAndView("test","user",user);
+	}
+	
+	public ModelAndView test(@RequestParam("account") String account)
+	{
+		User user=userService.findUser(account);
+		return new ModelAndView("test","user",user);
+	}
+	*/
+	/*public ModelAndView test(@RequestParam("account") String account, @RequestParam("password") String password, @RequestParam("name") String name, @RequestParam("email") String email, @RequestParam("phone") String phone) {
+		try
+		{
+			userService.registerUser(account, password,name,email,phone);
+		}
+		catch(Exception e)
+		{
+			return new ModelAndView("registerFail");
+		}
+		return new ModelAndView("registerSuccess");
+	}*/
+	/*
 	@RequestMapping("/insertUser")
 	public ModelAndView insertUser(@RequestParam("uid") int uid, @RequestParam("name") String name,@RequestParam("type") int type) {
 		logger.info("insert All User");

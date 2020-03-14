@@ -6,7 +6,7 @@
     <!-- paramerType：java自定义类型或数据类型-->
     
     <insert id="addPlateNumber" parameterType="registerPlateNumber">
-        insert into registerPlateNumber(pid,uid,plateNumber) values (NULL,#{uid},#{plateNumber})
+        insert into RegisterPlateNumber(pid,uid,plateNumber) values (NULL,#{uid},#{plateNumber})
     </insert>
     
      <select id="listRegisterPlateNumber" resultType="RegisterPlateNumber">
@@ -50,7 +50,11 @@
     </select>
     
     <delete id = "deleteRegisterBill" >
-    	delete from Reservation where Reservation.rid = #{rid}
+    	delete from RegisterBill where RegisterBill.rid = #{rid}
+    </delete>
+    
+    <delete id = "deleteWalkInUser" >
+    	delete from WalkInUser where WalkInUser.wid = #{wid}
     </delete>
     
     <insert id="addWalkInUser" parameterType="WalkInUser">

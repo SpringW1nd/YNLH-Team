@@ -43,7 +43,7 @@ public class User {
 		return phone;
 	}
 	public void setPhone(String phone) {
-		this.email = phone;
+		this.phone = phone;
 	}
 	
 }
