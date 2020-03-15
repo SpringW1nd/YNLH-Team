@@ -35,9 +35,13 @@
     	}
     </style>
     <script type="text/javascript">
-    	function goToMakeReservation(){
-    		$(location).attr('href', '');
+    	function goBackToReservation(){
+    		$(location).attr('href', 'aaa/reservationList');
     	}
+    	function sighout(){
+			$(location).attr('href', 'aaa/sighout');
+			
+		}
     </script>
   </head>
   <body>
@@ -66,7 +70,7 @@
 			<div class="col-md-1">
 				<ul class="nav nav-pills">
 					<li role="presentation" class="dropdown">
-						 <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+						<a class="dropdown-toggle" data-toggle="dropdown" onClick="sighout()" role="button" aria-haspopup="true" aria-expanded="false">
 						 	sign out
 						 </a>
 					</li>
@@ -134,7 +138,7 @@
   									<div class="col-md-2"></div>
   									<div class="col-md-2"></div>
   									<div class="col-md-2"><button type="submit" class="btn btn-default">Submit</button></div>
-  									<div class="col-md-2"><button type="button" class="btn btn-default">Cancle</button></div>
+  									<div class="col-md-2"><button type="button" class="btn btn-default" onClick="goBackToReservation();">Cancle</button></div>
   									<div class="col-md-2"></div>
   									<div class="col-md-2"></div>
   								</div>

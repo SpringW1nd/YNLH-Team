@@ -29,6 +29,13 @@
     	.side{height :100%; background-color:#981E32; position: relative;}
     	.content{height :100%;  position: relative; padding:0 0 0;}
     </style>
+    <script>
+    
+    	function goToRegisteration(){
+    		$(location).attr('href', 'aaa/goTORegisteration');
+    		
+    	}
+    </script>
   </head>
   <body>
     
@@ -49,7 +56,7 @@
 			<div class="col-md-1">
 				<ul class="nav nav-pills">
 					<li role="presentation" class="dropdown">
-						 <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+						 <a class="dropdown-toggle" data-toggle="dropdown" onClick="goToRegisteration();" role="button" aria-haspopup="true" aria-expanded="false">
 						 	sigh up
 						 </a>
 					</li>

@@ -34,6 +34,13 @@
    			background-color: #555;
     	}
     </style>
+    <script>
+	    function sighout(){
+			$(location).attr('href', 'aaa/sighout');
+			
+		}
+    </script>
+    
   </head>
   <body>
     
@@ -60,7 +67,7 @@
 			<div class="col-md-1">
 				<ul class="nav nav-pills">
 					<li role="presentation" class="dropdown">
-						 <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+						 <a class="dropdown-toggle" data-toggle="dropdown" onClick="sighout()" role="button" aria-haspopup="true" aria-expanded="false">
 						 	sign out
 						 </a>
 					</li>
