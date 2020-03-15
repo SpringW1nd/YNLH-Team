@@ -2,11 +2,14 @@ package com.YNLH.park.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.YNLH.park.dao.entity.User;
@@ -20,7 +23,9 @@ public class UserController {
 	private UserService userService;
 	
 	@RequestMapping("/login")
-	public ModelAndView Login (@RequestParam("username")String username, @RequestParam("password")String password)
+	public ModelAndView Login (@RequestParam("username")String username, 
+			                   @RequestParam("password")String password,
+			                   HttpServletRequest request)
 	{
 		try
 		{
@@ -35,6 +40,7 @@ public class UserController {
 			return new ModelAndView("loginFail");
 		}
 		
+		request.getSession(true).setAttribute("username", username);
 		return new ModelAndView("loginSuccess");
 	}
 	
@@ -50,7 +56,7 @@ public class UserController {
 			                         @RequestParam("comfirmPw") String comfirmPw, 
 			                         @RequestParam("name") String name, 
 			                         @RequestParam("email") String email, 
-			                         @RequestParam("phone") String phone)
+			                         @RequestParam("phoneNumber") String phone)
 	{
 		try
 		{
@@ -62,6 +68,7 @@ public class UserController {
 		}
 		catch(Exception e)
 		{
+			System.out.println("Exception registerUser!");
 			return new ModelAndView("registerFail");
 		}
 		
