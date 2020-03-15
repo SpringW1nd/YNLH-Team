@@ -56,12 +56,18 @@ public class ParkServiceImpl implements ParkService{
 		return registerPlateNumber;
 		
 	}
-	public List<RegisterPlateNumber> listRegisterPlateNumber(int uid)
+	public List<RegisterPlateNumber> listRegisterPlateNumber(String account)
 	{
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
 		
 		List<RegisterPlateNumber> registerPlateNumbers=null;
+		
+		UserServiceImpl service=new UserServiceImpl();
+		User user=service.findUser(account);
+		
+		int uid=user.getUid();
+		
 		try{
 			registerPlateNumbers=parkMapper.listRegisterPlateNumber(uid);
 		}catch(Exception e) {}
@@ -82,10 +88,15 @@ public class ParkServiceImpl implements ParkService{
 		return registerPlateNumber;
 	}
 
-	public Reservation makeReservation(int uid, Date rStartDate, Date rEndDate, String plateNumber)
+	public Reservation makeReservation(String account, Date rStartDate, Date rEndDate, String plateNumber)
 	{
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
+		UserServiceImpl service=new UserServiceImpl();
+		User user=service.findUser(account);
+		
+		int uid=user.getUid();
+		
 		
 		if(this.higherLevel.getAvailableNum()>0)
 		{
@@ -94,6 +105,10 @@ public class ParkServiceImpl implements ParkService{
 			reservation.setStartDate(rStartDate);
 			reservation.setEndDate(rEndDate);
 			reservation.setPlateNumber(plateNumber);
+			reservation.setName(user.getName());
+			reservation.setEmail(user.getEmail());
+			reservation.setPhone(user.getPhone());
+			reservation.setParkingSpace("201");
 			int rid=0;
 			
 			try{
@@ -115,10 +130,15 @@ public class ParkServiceImpl implements ParkService{
 		return null;
 	}
 	
-	public List<Reservation> listReservation(int uid)
+	public List<Reservation> listReservation(String account)
 	{
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
+		
+		UserServiceImpl service=new UserServiceImpl();
+		User user=service.findUser(account);
+		
+		int uid=user.getUid();
 		
 		List<Reservation> reservations=null;
 		try {
@@ -184,10 +204,15 @@ public class ParkServiceImpl implements ParkService{
 		return registerBill;
 		
 	}
-	public List<RegisterBill> listRegisterBill(int uid)
+	public List<RegisterBill> listRegisterBill(String account)
 	{
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
+		
+		UserServiceImpl service=new UserServiceImpl();
+		User user=service.findUser(account);
+		
+		int uid=user.getUid();
 		
 		List<RegisterBill> bills=null;
 		try{
