@@ -61,7 +61,7 @@
 			<div class="col-md-8 " >
 				<div class="panel-heading">Registeration</div>
 				<div class="panel-body">
-					<form method="post" action="aaa/registeration">
+					<form method="post" action="user/registeration">
 						<div class="row" style="margin:15px 0 0 0; ">
 							<div class="col-md-2"></div>
 							<div class="col-md-8">

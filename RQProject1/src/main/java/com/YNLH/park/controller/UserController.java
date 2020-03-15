@@ -19,20 +19,53 @@ public class UserController {
 	@Autowired//自动装配Service bean
 	private UserService userService;
 	
-	
-	
-	@RequestMapping("/registerUser")
-	public ModelAndView registerUser(@RequestParam("account") String account, @RequestParam("password") String password, @RequestParam("name") String name, @RequestParam("email") String email, @RequestParam("phone") String phone)
+	@RequestMapping("/login")
+	public ModelAndView Login (@RequestParam("username")String username, @RequestParam("password")String password)
 	{
 		try
 		{
-			userService.registerUser(account, password,name,email,phone);
+			User U = userService.login(username, password);
+			if (U == null)
+			{
+				return new ModelAndView("loginFail");
+			}
+		}
+		catch(Exception e)
+		{
+			return new ModelAndView("loginFail");
+		}
+		
+		return new ModelAndView("loginSuccess");
+	}
+	
+	@RequestMapping("/goTORegisteration")
+	public ModelAndView goTORegisteration()
+	{
+		return new ModelAndView("registeration");
+	}
+	
+	@RequestMapping("/registeration")
+	public ModelAndView registerUser(@RequestParam("username") String username,
+			                         @RequestParam("password") String password, 
+			                         @RequestParam("comfirmPw") String comfirmPw, 
+			                         @RequestParam("name") String name, 
+			                         @RequestParam("email") String email, 
+			                         @RequestParam("phone") String phone)
+	{
+		try
+		{
+			User U = userService.registerUser(username, password, name, email, phone);
+			if (U == null)
+			{
+				return new ModelAndView("registerFail");
+			}
 		}
 		catch(Exception e)
 		{
 			return new ModelAndView("registerFail");
 		}
-		return new ModelAndView("registerSuccess");
+		
+		return new ModelAndView("registeUserMainPage");
 	}
 	
 	
@@ -42,37 +75,6 @@ public class UserController {
 		List<User> userList = userService.listUsers();
 		return new ModelAndView("queryUser","userList",userList);
 	}
-	/*
-	@RequestMapping("/test")
-	public ModelAndView test(@RequestParam("account") String account, @RequestParam("password") String password)
-	{
-		User user=userService.login(account,password);
-		return new ModelAndView("test","user",user);
-	}/*
-	public ModelAndView test(@RequestParam("uid") String uid)
-	{
-		int i=Integer.parseInt(uid);
-		User user=userService.findUserById(i);
-		return new ModelAndView("test","user",user);
-	}
-	
-	public ModelAndView test(@RequestParam("account") String account)
-	{
-		User user=userService.findUser(account);
-		return new ModelAndView("test","user",user);
-	}
-	*/
-	/*public ModelAndView test(@RequestParam("account") String account, @RequestParam("password") String password, @RequestParam("name") String name, @RequestParam("email") String email, @RequestParam("phone") String phone) {
-		try
-		{
-			userService.registerUser(account, password,name,email,phone);
-		}
-		catch(Exception e)
-		{
-			return new ModelAndView("registerFail");
-		}
-		return new ModelAndView("registerSuccess");
-	}*/
 	/*
 	@RequestMapping("/insertUser")
 	public ModelAndView insertUser(@RequestParam("uid") int uid, @RequestParam("name") String name,@RequestParam("type") int type) {

@@ -32,7 +32,7 @@
     <script>
     
     	function goToRegisteration(){
-    		$(location).attr('href', 'aaa/goTORegisteration');
+    		$(location).attr('href', 'user/goTORegisteration');
     		
     	}
     </script>
@@ -66,7 +66,7 @@
 		</div>
 		<div class="row main" >
 			<div class="col-md-4 side" >
-				<form method="post" action="aaa/aab">
+				<form method="post" action="user/login">
 					<div class="bs-example pager center-block" data-example-id="basic-forms" style="color:white;padding: 30px 10px 30px 15px;border-radius: 11px;background-color: #292929;margin: 80px 10px 10px 10px;">
 						<div class="row text-left">
 							<h4>Registed User:</h4>

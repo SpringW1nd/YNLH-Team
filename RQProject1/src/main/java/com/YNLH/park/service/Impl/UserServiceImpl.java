@@ -77,6 +77,10 @@ public class UserServiceImpl implements UserService {
 	{
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		UserMapper userMapper = ctx.getBean(UserMapper.class);
+		
+		System.out.println("username=====>"+account);
+		System.out.println("password=====>"+password);
+		
 		User user=null;
 		User userx=new User();
 		userx.setAccount(account);

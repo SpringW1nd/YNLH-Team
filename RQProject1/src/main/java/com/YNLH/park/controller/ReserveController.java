@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.YNLH.park.dao.entity.*;
+import com.YNLH.park.dao.entity.Reservation;
 import com.YNLH.park.service.ParkService;
+import com.YNLH.park.service.UserService;
 
-@RequestMapping("/reserve")
+@RequestMapping("/reservation")
 @Controller
 public class ReserveController {
 	//logger
@@ -23,121 +24,46 @@ public class ReserveController {
 	@Autowired
 	private ParkService ParkSrv;
 	
+	@Autowired
+	private UserService UserSrv;
 	
-	@RequestMapping("/test")
-	public ModelAndView test()
+	@RequestMapping("/makeReservation")
+	public ModelAndView makeReservation(@RequestParam("username")String username) 
 	{
-		Date wStartDate=new Date(120,3,16,4,43);
-		Date wEndDate=new Date(120,3,16,5,43);
-		ParkSrv.walkUserIn("1234", wStartDate);
-		double fee= ParkSrv.walkUserOut("1234", wEndDate);
+		logger.info("makeReservation:");
 		
-		return new ModelAndView("test","fee",fee);
-		/*
-		Date rStartDate=new Date(120,3,16,4,43);		//120 ->1900+120=2020
-		Date rEndDate=new Date(120,3,16,5,57);
-		Reservation resv=ParkSrv.makeReservation(3, rStartDate, rEndDate, "9842");
-		return new ModelAndView("test","resv",resv);
-		*/
-	}
-	/*
-	public ModelAndView test()
-	{
-		Reservation resv=ParkSrv.findReservationByPlateNumber("7890");
-		return new ModelAndView("test","resv",resv);
-	}
-	*/
+		// todo
 	
-	/*
-	public ModelAndView test()
-	{
-		Reservation resv=ParkSrv.findReservation(1);
-		return new ModelAndView("test","resv",resv);
-	}*/
-	/*
-	public ModelAndView test(@RequestParam("uid") String uid)
-	{
-		int i=Integer.parseInt(uid);
-		List<Reservation> resvs=ParkSrv.listReservation(i);
-		return new ModelAndView("test","resvs",resvs);
-	}
-	/*
-	public ModelAndView test()
-	{
-		Date rStartDate=new Date(120,3,16,3,57);		//120 ->1900+120=2020
-		Date rEndDate=new Date(120,3,16,4,57);
-		Reservation resv=ParkSrv.makeReservation(3, rStartDate, rEndDate, "7890");
-		return new ModelAndView("test","resv",resv);
+		return new ModelAndView("makeReservation", "plateList", "plateList");
 	}
 	
-	
-	public ModelAndView test()
-	{
-		Date rStartDate=new Date(2020,3,13,3,17);
-		Date rEndDate=new Date(2020,3,13,4,17);
-		Reservation resv=ParkSrv.makeReservation(2, rStartDate, rEndDate, "2345");
-		return new ModelAndView("test","resv",resv);
-	}
-	*/
-	
-	/*
-	public ModelAndView test(@RequestParam("plateNumber") String plateNumber)
-	{
-		RegisterPlateNumber plate=ParkSrv.findRegisterPlateNumber(plateNumber);
-		return new ModelAndView("test","plate",plate);
-	}*/
-	
-	/*
-	public ModelAndView test(@RequestParam("uid") String uid)
-	{
-		int i=Integer.parseInt(uid);
-		List<RegisterPlateNumber> plates=ParkSrv.listRegisterPlateNumber(i);
-		return new ModelAndView("test","plates",plates);
-	}
-	
-	public ModelAndView test(@RequestParam("uid") String uid, @RequestParam("plateNumber") String plateNumber)
-	{
-		int i=Integer.parseInt(uid);
-		RegisterPlateNumber plate=ParkSrv.addRegisterPlateNumber(i,plateNumber);
-		return new ModelAndView("test","plate",plate);
-	}*/
-	
-	
-	@RequestMapping("/")
-	public ModelAndView Reserve(@RequestParam("UserId") int UserId,
-			                    @RequestParam("PlateNumber") String PlateNumber, 
-			                    @RequestParam("StartTime") Date StartTime,
-			                    @RequestParam("EndTime") Date EndTime) 
+	@RequestMapping("/reservation")
+	public ModelAndView reservation(@RequestParam("name")String username, 
+			                        @RequestParam("plateNumber")String plateNumber, 
+			                        @RequestParam("RStartDate")Date RStartDate, 
+			                        @RequestParam("REndDate")Date REndDate) 
 	{
 		logger.info("Reserve:");
 		
-		Reservation Rev = ParkSrv.makeReservation(UserId, StartTime, EndTime, PlateNumber);
+		Reservation Rev = ParkSrv.makeReservation(0 /*username*/, RStartDate, REndDate, plateNumber);
 		if (Rev == null)
 		{
-			return new ModelAndView("Reserve", "Status", "Fail");
+			return new ModelAndView("reservationFail", "Status", "Fail");
 		}
-		else
-		{	
-			return ReserveQueryPn (PlateNumber);
-		}
-	}
-	
-	@RequestMapping("/queryPN")
-	public ModelAndView ReserveQueryPn(@RequestParam("PlateNumber") String PlateNumber) 
-	{
-		System.out.println("ReserveQuery!!!!");
-		Reservation Rev = ParkSrv.findReservationByPlateNumber(PlateNumber);
-		
-		HashMap<String, Object> RevInfo = new HashMap<String, Object>();
-		RevInfo.put("ReserveId",   Rev.getRid()); 
-		RevInfo.put("PlateNumber", Rev.getPlateNumber());  
-		RevInfo.put("StartDate",   Rev.getStartDate());
-		RevInfo.put("EndDate",     Rev.getEndDate()); 
 
-        return new ModelAndView("RevInfo", RevInfo);
+		HashMap<String, Object> RevInfo = new HashMap<String, Object>();
+		RevInfo.put("reservationNumber",  Rev.getRid()); 
+		RevInfo.put("email",  "email");  
+		RevInfo.put("name",   "name");
+		RevInfo.put("RStartDate",   Rev.getStartDate()); 
+		RevInfo.put("REndDate",     Rev.getEndDate()); 
+		RevInfo.put("plateNumber",  Rev.getPlateNumber()); 
+		RevInfo.put("parkspace",    "parkspace"); 
+
+		return new ModelAndView("reservationSuccess", "RevInfo", RevInfo);
 	}
 	
-	@RequestMapping("/queryUser")
+	@RequestMapping("/reservationList")
 	public ModelAndView ReserveQueryUser(@RequestParam("UserId") int UserId) 
 	{
 		System.out.println("ReserveQuery!!!!");
@@ -147,7 +73,7 @@ public class ReserveController {
 	}
 	
 	@RequestMapping("/cancel")
-	public ModelAndView ReserveCancel(@RequestParam("ReserveId") int ReserveId) 
+	public ModelAndView ReserveCancel(@RequestParam("reservationNumber") int ReserveId) 
 	{
 		System.out.println("ReserveCancel!!!!");
 		boolean IsCancel = ParkSrv.cancelReservation(ReserveId);
@@ -159,13 +85,5 @@ public class ReserveController {
 		{
 			return new ModelAndView("Cancel", "Status", false);
 		}	
-	}
-	
-	@RequestMapping("/extend")
-	public ModelAndView ReserveExtend(@RequestParam("ExTime") int ExTime) 
-	{
-		System.out.println("ReserveExtend!!!!");
-		
-		return new ModelAndView("Extend", "Status", "Not Implemented");
 	}
 }

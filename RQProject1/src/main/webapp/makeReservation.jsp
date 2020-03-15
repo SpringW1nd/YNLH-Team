@@ -86,7 +86,7 @@
 				<div class="panel-heading">Make A Reservation</div>
 				<div class="panel-body">
 					
-						<form type="post" action="aaa/reservation">
+						<form type="post" action="reservation/reservation">
 							<div class="row" style="margin:15px 0 0 0; ">
 								<div class="col-md-2"></div>
 								<div class="col-md-4">
