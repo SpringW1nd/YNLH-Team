@@ -1,6 +1,8 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"  isELIgnored="false"%>
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
+  	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -36,10 +38,10 @@
     </style>
     <script type="text/javascript">
     	function backToMainPage(){
-    		$(location).attr('href', 'aaa/aab?username=123&password=123');
+    		$(location).attr('href', 'user/login?username=123&password=123');
     	}
     	function sighout(){
-			$(location).attr('href', 'aaa/sighout');
+			$(location).attr('href', 'user/sighout');
 			
 		}
     </script>
@@ -60,11 +62,11 @@
 			</div>
 			<div class="col-md-9" style="padding: 10px 0 0 0;">
 				<ul class="nav nav-pills">
-				  <li role="presentation " ><a class="navigation" href="aaa/aab?username=123&password=123">Home</a></li>
+				  <li role="presentation " ><a class="navigation" href="user/login?username=123&password=123">Home</a></li>
 				  <li role="presentation " class="active"><a>Reservation</a></li>
 				  <li role="presentation "><a class="navigation" href="aaa/aab?username=123&password=123">Contract</a></li>
 				  <li role="presentation "><a class="navigation" href="aaa/aab?username=123&password=123">Bill</a></li>
-				  <li role="presentation "><a class="navigation" href="aaa/Operation">Operation</a></li>
+				  <li role="presentation "><a class="navigation" href="operation/operationMain">Operation</a></li>
 				</ul>
 			</div>
 			<div class="col-md-1">
@@ -89,13 +91,12 @@
 				<div class="panel panel-default" style="height: 100%;">
 					<div class="panel-heading">Reservation Information</div>
 					<div class="panel-body">
-						<h3>Max,Thank you for your reservation!</h3>
-						<p>Name: Max</p>
-						<p>Reservatin number: 123</p>
-						<p>Email: max@gmail.com</p>
-						<p>Plate Number: 123</p>
-						<p>Parking space: 123</p>
-						<p>Reservation Time: 3/13/2020 8:30 am - 3/14/2020 8:30 am	</p>
+						<h3>${RevInfo.name},Thank you for your reservation!</h3>
+						<p>Reservatin number: ${RevInfo.reservationNumber }</p>
+						<p>Email: ${RevInfo.email}</p>
+						<p>Plate Number: ${RevInfo.plateNumber}</p>
+						<p>Parking space: ${RevInfo.parkspace}</p>
+						<p>Reservation Time: ${RevInfo.RStartDate} - ${RevInfo.REndDate}	</p>
 						<div class="row">
 							<div class="col-md-2"></div>
 							<div class="col-md-2"></div>

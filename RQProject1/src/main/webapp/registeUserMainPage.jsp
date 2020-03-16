@@ -1,6 +1,8 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"  isELIgnored="false"%>
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
+  	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -36,7 +38,7 @@
     </style>
     <script>
 	    function sighout(){
-			$(location).attr('href', 'aaa/sighout');
+			$(location).attr('href', 'user/sighout');
 			
 		}
     </script>
@@ -58,10 +60,10 @@
 			<div class="col-md-9" style="padding: 10px 0 0 0;">
 				<ul class="nav nav-pills">
 				  <li role="presentation " class="active"><a>Home</a></li>
-				  <li role="presentation "><a class="navigation" href="aaa/reservationList">Reservation</a></li>
+				  <li role="presentation "><a class="navigation" href="reservation/reservationList">Reservation</a></li>
 				  <li role="presentation "><a class="navigation" href="aaa/aab?username=123&password=123">Contract</a></li>
 				  <li role="presentation "><a class="navigation" href="aaa/aab?username=123&password=123">Bill</a></li>
-				  <li role="presentation "><a class="navigation" href="aaa/Operation">Operation</a></li>
+				  <li role="presentation "><a class="navigation" href="operation/operationMain">Operation</a></li>
 				</ul>
 			</div>
 			<div class="col-md-1">
@@ -88,19 +90,15 @@
 								<table class="table table-hover">
 									<tr>
 										<td>Name</td>
-										<td>Max</td>
-									</tr>
-									<tr>
-										<td>age</td>
-										<td>25</td>
+										<td>${user.name}</td>
 									</tr>
 									<tr>
 										<td>Email</td>
-										<td>Max@gmail.com</td>
+										<td>${user.email}</td>
 									</tr>
 									<tr>
 										<td>Phone</td>
-										<td>5092181234</td>
+										<td>${user.phone}</td>
 									</tr>
 								</table>
 							</div>

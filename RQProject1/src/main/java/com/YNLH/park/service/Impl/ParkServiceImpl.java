@@ -113,14 +113,15 @@ public class ParkServiceImpl implements ParkService{
 			
 			try{
 				rid=parkMapper.makeReservation(reservation);		//rid=1 success, 0 fail
+				rid = reservation.getRid();
 			}catch(Exception e) {}
 			
 			//this.addRegisterPlateNumber(uid, plateNumber);
 			
 			this.higherLevel.setAvailableNum(higherLevel.getAvailableNum()-1);
-			
-			reservation=this.findReservationByPlateNumber(plateNumber);
-			rid=reservation.getRid();
+//			
+//			reservation=this.findReservationByPlateNumber(plateNumber);
+//			rid=reservation.getRid();
 			
 			long minute=rEndDate.getTime()-rStartDate.getTime();
 			this.addRegisterBill(uid,rid,minute*0.02/1000.0/60.0);		//fee rate: 0.02
@@ -130,15 +131,10 @@ public class ParkServiceImpl implements ParkService{
 		return null;
 	}
 	
-	public List<Reservation> listReservation(String account)
+	public List<Reservation> listReservation(int uid)
 	{
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
-		
-		UserServiceImpl service=new UserServiceImpl();
-		User user=service.findUser(account);
-		
-		int uid=user.getUid();
 		
 		List<Reservation> reservations=null;
 		try {

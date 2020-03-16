@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.YNLH.park.dao.entity.User;
@@ -27,21 +26,28 @@ public class UserController {
 			                   @RequestParam("password")String password,
 			                   HttpServletRequest request)
 	{
-		try
-		{
-			User U = userService.login(username, password);
-			if (U == null)
+		User U = null;
+		if(request.getSession().getAttribute("user")==null) {
+			
+			try
 			{
-				return new ModelAndView("loginFail");
+				U = userService.login(username, password);
+				if (U == null)
+				{
+					return new ModelAndView("index","LoginFlag","0");
+				}
 			}
+			catch(Exception e)
+			{
+				return new ModelAndView("index","LoginFlag","0");
+			}
+			
+			request.getSession(true).setAttribute("user", U);
 		}
-		catch(Exception e)
-		{
-			return new ModelAndView("loginFail");
-		}
+		ModelAndView mnv = new ModelAndView("registeUserMainPage");
+		mnv.addObject("user", U);
+		return mnv;
 		
-		request.getSession(true).setAttribute("username", username);
-		return new ModelAndView("loginSuccess");
 	}
 	
 	@RequestMapping("/goTORegisteration")
@@ -81,6 +87,12 @@ public class UserController {
 		logger.info("list All User");
 		List<User> userList = userService.listUsers();
 		return new ModelAndView("queryUser","userList",userList);
+	}
+	@RequestMapping("/sighout")
+	public ModelAndView sighout(HttpServletRequest request) {
+		logger.info("sigh out");
+		request.getSession().invalidate();
+		return new ModelAndView("index");
 	}
 	/*
 	@RequestMapping("/insertUser")

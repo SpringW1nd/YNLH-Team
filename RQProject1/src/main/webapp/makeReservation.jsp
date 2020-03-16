@@ -1,6 +1,8 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"  isELIgnored="false"%>
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
+  	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -36,10 +38,10 @@
     </style>
     <script type="text/javascript">
     	function goBackToReservation(){
-    		$(location).attr('href', 'aaa/reservationList');
+    		$(location).attr('href', 'reservation/reservationList');
     	}
     	function sighout(){
-			$(location).attr('href', 'aaa/sighout');
+			$(location).attr('href', 'user/sighout');
 			
 		}
     </script>
@@ -60,11 +62,11 @@
 			</div>
 			<div class="col-md-9" style="padding: 10px 0 0 0;">
 				<ul class="nav nav-pills">
-				  <li role="presentation " ><a class="navigation" href="aaa/aab?username=123&password=123">Home</a></li>
+				  <li role="presentation " ><a class="navigation" href="user/login?username=123&password=123">Home</a></li>
 				  <li role="presentation " class="active"><a>Reservation</a></li>
 				  <li role="presentation "><a class="navigation" href="aaa/aab?username=123&password=123">Contract</a></li>
 				  <li role="presentation "><a class="navigation" href="aaa/aab?username=123&password=123">Bill</a></li>
-				  <li role="presentation "><a class="navigation" href="aaa/Operation">Operation</a></li>
+				  <li role="presentation "><a class="navigation" href="operation/operationMain">Operation</a></li>
 				</ul>
 			</div>
 			<div class="col-md-1">
@@ -100,8 +102,9 @@
 		  								<label for="plateNumber">Plate Number</label>
 		    							<input list="numberList" class="form-control" id="plateNumber" name="plateNumber" placeholder="plateNumber"  type="text">
 										<datalist id="numberList">
-										    <option value="123">123</option>
-										    <option value="234">234</option>
+											<c:forEach var="a" items="${plateList}">
+												<option value="${a.plateNumber}">${a.plateNumber}</option>
+											</c:forEach>
 										</datalist>
 		  							</div>
 								</div>

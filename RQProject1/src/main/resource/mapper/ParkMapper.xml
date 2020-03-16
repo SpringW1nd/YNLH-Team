@@ -5,7 +5,7 @@
 <mapper namespace="com.YNLH.park.dao.mapper.ParkMapper">
     <!-- paramerType：java自定义类型或数据类型-->
     
-    <insert id="addPlateNumber" parameterType="registerPlateNumber">
+    <insert id="addPlateNumber"  parameterType="registerPlateNumber">
         insert into RegisterPlateNumber(pid,uid,plateNumber) values (NULL,#{uid},#{plateNumber})
     </insert>
     
@@ -17,12 +17,14 @@
           select * from RegisterPlateNumber where RegisterPlateNumber.plateNumber = #{plateNumber}
     </select>
     
-    <insert id="makeReservation" parameterType="Reservation">
+    <insert id="makeReservation" keyProperty="rid" useGeneratedKeys="true" parameterType="Reservation">
         insert into Reservation(uid,rStartDate,rEndDate,plateNumber) values (#{uid},#{rStartDate},#{rEndDate},#{plateNumber})
     </insert>
     
     <select id="listReservation" resultType="Reservation">
-          select * from Reservation where Reservation.uid = #{uid}
+          select Reservation.rid, Reservation.rStartDate, Reservation.rEndDate,Reservation.plateNumber,
+          User.uid, User.account,User.password,User.name,User.email,User.phone from Reservation,User where Reservation.uid = User.uid
+          and User.uid = #{uid}
     </select>
     	
      <select id="findReservation" resultType="Reservation">

@@ -15,6 +15,18 @@ public class Reservation {
 	private String phone;
 	private String parkingSpace;
 
+	public Date getrStartDate() {
+		return rStartDate;
+	}
+	public void setrStartDate(Date rStartDate) {
+		this.rStartDate = rStartDate;
+	}
+	public Date getrEndDate() {
+		return rEndDate;
+	}
+	public void setrEndDate(Date rEndDate) {
+		this.rEndDate = rEndDate;
+	}
 	public int getRid()
 	{
 		return rid;

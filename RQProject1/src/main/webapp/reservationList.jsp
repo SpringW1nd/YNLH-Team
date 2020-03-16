@@ -1,6 +1,9 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"  isELIgnored="false"%>
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
+  	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+  	<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -36,10 +39,10 @@
     </style>
     <script type="text/javascript">
     	function goToMakeReservation(){
-    		$(location).attr('href', 'aaa/makeReservation');
+    		$(location).attr('href', 'reservation/makeReservation');
     	}
     	function sighout(){
-			$(location).attr('href', 'aaa/sighout');
+			$(location).attr('href', 'user/sighout');
 			
 		}
     </script>
@@ -58,11 +61,11 @@
 			</div>
 			<div class="col-md-9" style="padding: 10px 0 0 0;">
 				<ul class="nav nav-pills">
-				  <li role="presentation " ><a class="navigation" href="aaa/aab?username=123&password=123">Home</a></li>
+				  <li role="presentation " ><a class="navigation" href="user/login?username=123&password=123">Home</a></li>
 				  <li role="presentation " class="active"><a>Reservation</a></li>
 				  <li role="presentation "><a class="navigation" href="aaa/aab?username=123&password=123">Contract</a></li>
 				  <li role="presentation "><a class="navigation" href="aaa/aab?username=123&password=123">Bill</a></li>
-				  <li role="presentation "><a class="navigation" href="aaa/Operation">Operation</a></li>
+				  <li role="presentation "><a class="navigation" href="operation/operationMain">Operation</a></li>
 				</ul>
 			</div>
 			<div class="col-md-1">
@@ -94,16 +97,19 @@
 								<td>Name</td>
 								<td>Plate Number</td>
 								<td>Phone Number</td>
-								<td>State</td>
 							</tr>
-							<tr>
-								<td><a>123</a></td>
-								<td>3/11/2020</td>
-								<td>Max</td>
-								<td>123123</td>
-								<td>509123456</td>
-								<td>Completed</td>
-							</tr>
+							<c:forEach var="item" items="${reservationList}">
+								<tr>
+									<td><a>${item.rid}</a></td>
+									<td>
+										<fmt:formatDate value="${item.rStartDate}"  type="both"/>
+									</td>
+									<td>${item.name}</td>
+									<td>${item.plateNumber}</td>
+									<td>${item.phone}</td>
+								</tr>
+							</c:forEach>
+							<!-- 
 							<tr class="danger">
 								<td><a>123</a></td>
 								<td>3/12/2020</td>
@@ -128,6 +134,7 @@
 								<td>509123456</td>
 								<td>Reservated</td>
 							</tr>
+							 -->
 						</table>
 					</div>
 				</div>

@@ -88,8 +88,9 @@ public class UserServiceImpl implements UserService {
 		try{
 			user=userMapper.login(userx);
 		}catch(Exception e) {
-			
+			e.printStackTrace();
 		}
+		
 		return user;
 	}
 	

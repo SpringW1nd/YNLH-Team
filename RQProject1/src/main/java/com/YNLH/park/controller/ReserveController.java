@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.YNLH.park.dao.entity.RegisterPlateNumber;
 import com.YNLH.park.dao.entity.Reservation;
+import com.YNLH.park.dao.entity.User;
 import com.YNLH.park.service.ParkService;
 import com.YNLH.park.service.UserService;
 
@@ -34,22 +35,22 @@ public class ReserveController {
 	{
 		logger.info("makeReservation:");
 		
-		String username = (String) request.getAttribute("username");
-		System.out.println("makeReservation username=====>" + username);
-		List<RegisterPlateNumber> platList = ParkSrv.listRegisterPlateNumber (username);
-	
+		User U = (User) request.getSession(true).getAttribute("user");
+		List<RegisterPlateNumber> platList = ParkSrv.listRegisterPlateNumber (U.getAccount());
+		System.out.print("platList=====>"+platList.size());
 		return new ModelAndView("makeReservation", "plateList", platList);
 	}
 	
 	@RequestMapping("/reservation")
-	public ModelAndView reservation(@RequestParam("name")String username, 
+	public ModelAndView reservation(@RequestParam("name")String name, 
 			                        @RequestParam("plateNumber")String plateNumber, 
 			                        @RequestParam("RStartDate")Date RStartDate, 
-			                        @RequestParam("REndDate")Date REndDate) 
+			                        @RequestParam("REndDate")Date REndDate,
+			                        HttpServletRequest request) 
 	{
 		logger.info("Reserve:");
-		
-		Reservation Rev = ParkSrv.makeReservation(username, RStartDate, REndDate, plateNumber);
+		User U = (User)request.getSession(true).getAttribute("user");
+		Reservation Rev = ParkSrv.makeReservation(U.getAccount(), RStartDate, REndDate, plateNumber);
 		if (Rev == null)
 		{
 			return new ModelAndView("reservationFail", "Status", "Fail");
@@ -72,9 +73,9 @@ public class ReserveController {
 	{
 		System.out.println("ReserveQuery!!!!");
 		
-		String username = (String) request.getAttribute("username");
-		List<Reservation> RevList = ParkSrv.listReservation(username);
-
+		User U = (User) request.getSession(true).getAttribute("user");
+		List<Reservation> RevList = ParkSrv.listReservation(U.getUid());
+		System.out.print("RevList----->"+RevList.size());
         return new ModelAndView("reservationList", "reservationList", RevList);
 	}
 	

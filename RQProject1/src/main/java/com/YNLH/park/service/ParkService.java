@@ -16,7 +16,7 @@ public interface ParkService {
 	
 	
 	public Reservation makeReservation(String account, Date rStartDate, Date rEndDate, String plateNumber);
-	public List<Reservation> listReservation(String account);
+	public List<Reservation> listReservation(int uid);
 	public Reservation findReservation(int rid);
 	public Reservation findReservationByPlateNumber(String plateNumber);
 	public boolean cancelReservation(int rid);
