@@ -13,17 +13,13 @@ import com.YNLH.park.dao.mapper.*;
 import com.YNLH.park.service.*;
 
 @Service
-public class ParkServiceImpl implements ParkService{
+public class ParkServiceImpl implements ParkService
+{
 	//logger
 	private final static Logger logger = Logger.getLogger(ParkServiceImpl.class);
 	
-	@SuppressWarnings("resource")
-	private ParkMapper getParkMapper ()
-	{
-		ApplicationContext appCtx = new ClassPathXmlApplicationContext("applicationContext.xml");
-			
-        return appCtx.getBean(ParkMapper.class);	
-	}
+	private static ApplicationContext appCtx = new ClassPathXmlApplicationContext("applicationContext.xml");
+	private static ParkMapper parkMapper = appCtx.getBean(ParkMapper.class);
 	
 	public RegisterPlateNumber addRegisterPlateNumber(int uid, String plateNumber)
 	{
@@ -176,8 +172,7 @@ public class ParkServiceImpl implements ParkService{
 	}
 	
 	/* -------------- liwen 3/17: bill management begin   -------------------- */
-	private RegisterBill initBill(ParkMapper parkMapper,
-			                      int rid, int uid, 
+	private RegisterBill initBill(int rid, int uid, 
 			                      String plateNumber, String parkNumber, 
 			                      Date entryTime, Date exitTime)
 	{
@@ -185,7 +180,7 @@ public class ParkServiceImpl implements ParkService{
 		
 		try
 		{
-		    parkMapper.addRegisterBill(regBill);
+			parkMapper.addRegisterBill(regBill);
 		    
 		    return regBill;
 		}
@@ -260,8 +255,6 @@ public class ParkServiceImpl implements ParkService{
 	/* -------------- liwen 3/17 : park space management begin -------------------- */
 	public int getIdleParkCount()
 	{
-		ParkMapper parkMapper = getParkMapper ();
-		
 		List<ParkingSpace> setPs = parkMapper.getIdleParking();
 		if (setPs == null)
 		{
@@ -273,8 +266,6 @@ public class ParkServiceImpl implements ParkService{
 
 	public List<ParkingSpace> getIdleParkSet()
 	{
-		ParkMapper parkMapper = getParkMapper ();
-		
 		return parkMapper.getIdleParking();		
 	}	
 	/* -------------- liwen 3/17 : park space management end    -------------------- */
@@ -283,7 +274,6 @@ public class ParkServiceImpl implements ParkService{
 	/* -------------- liwen 3/17: vehicle entry/exit process begin ----------------- */
 	public int vehicleEntry(String plateNumber)
 	{
-		ParkMapper parkMapper = getParkMapper ();
 		RegisterBill regBill = null;
 		String parkNumber = null;
 		
@@ -303,7 +293,7 @@ public class ParkServiceImpl implements ParkService{
 				parkNumber = Ps.getParkNumber ();
 				
 				/*3. initialize a bill */
-				regBill = initBill (parkMapper, 0, 0, plateNumber, parkNumber, new Date(), null);
+				regBill = initBill (0, 0, plateNumber, parkNumber, new Date(), null);
 			}
 			else
 			{
@@ -311,7 +301,7 @@ public class ParkServiceImpl implements ParkService{
 				parkNumber = Rev.getParkNumber();
 				
 				/*3. initialize a bill */
-				regBill = initBill (parkMapper, Rev.getRid(), Rev.getUid(), 
+				regBill = initBill (Rev.getRid(), Rev.getUid(), 
 						            plateNumber, parkNumber, new Date(), null);
 			}
 			
@@ -332,8 +322,6 @@ public class ParkServiceImpl implements ParkService{
 	
 	public RegisterBill vehicleExit(String plateNumber)
 	{
-		ParkMapper parkMapper = getParkMapper ();
-		
 		/*1. find the bill according to the plateNumber */
 		RegisterBill regBill = findActiveBill (parkMapper, plateNumber);
 		if (regBill == null)
