@@ -2,22 +2,36 @@ package com.YNLH.park.dao.entity;
 
 public class ParkingSpace {
 	private int level;
-	private int availableNum;
+	private String parkNumber;
+	private int status;
 	
 	public int getLevel()
 	{
 		return level;
 	}
+	
 	public void setLevel(int level)
 	{
 		this.level=level;
 	}
-	public int getAvailableNum()
+	
+	public int getStatus()
 	{
-		return availableNum;
+		return status;
 	}
-	public void setAvailableNum(int availableNum)
+	
+	public void setStatus(int status)
 	{
-		this.availableNum=availableNum;
+		this.status = status;
+	}
+	
+	public String getParkNumber()
+	{
+		return parkNumber;
+	}
+	
+	public void setParkNumber(String parkNumber)
+	{
+		this.parkNumber = parkNumber;
 	}
 }

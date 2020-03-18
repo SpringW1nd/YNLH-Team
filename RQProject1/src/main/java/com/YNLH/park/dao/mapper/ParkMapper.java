@@ -1,5 +1,6 @@
 package com.YNLH.park.dao.mapper;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -15,12 +16,20 @@ public interface ParkMapper {
 	public Reservation findReservation(int rid) throws Exception;
 	public Reservation findReservationByPlateNumber(String plateNumber) throws Exception;
 	public boolean cancelReservation(int rid);
-	public int addRegisterBill(RegisterBill registerBill);
+	
+	/* ---------------------- liwen 3/17: bill management -----------------*/
+	public int addRegisterBill(RegisterBill registerBill) throws Exception;
+	public RegisterBill findActiveBill(String plateNumber) throws Exception;
+	public RegisterBill completeBill (String plateNumber, Date exitTime, double fee) throws Exception;;
+	
 	public List<RegisterBill> listRegisterBill(int uid) throws Exception;
-	public RegisterBill findRegisterBill(int rid) throws Exception;
 	public boolean deleteRegisterBill(int rid);
-	public boolean deleteWalkInUser(int wid);
-	public int addWalkInUser(WalkInUser walkInUser);
-	public WalkInUser findWalkInUser(String plateNumber) throws Exception;
+	/* ---------------------- liwen 3/17: bill management -----------------*/
+	
+	/* ---------------------- liwen 3/17: Parking Space management -----------------*/
+	public ParkingSpace allotParking();
+	public void updateParking(int level, String parkNumber, int status);
+	public List<ParkingSpace> getIdleParking();
+	/* ---------------------- liwen 3/17: Parking Space management -----------------*/
 	
 }
