@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//src/main/java=UTF-8
 encoding//src/main/webapp/Operation.jsp=UTF-8
 encoding//src/main/webapp/index.jsp=UTF-8
 encoding//src/main/webapp/makeReservation.jsp=UTF-8
@@ -8,4 +9,5 @@ encoding//src/main/webapp/registeration.jsp=UTF-8
 encoding//src/main/webapp/relatePlate.jsp=UTF-8
 encoding//src/main/webapp/reservationList.jsp=UTF-8
 encoding//src/main/webapp/reservationSuccess.jsp=UTF-8
+encoding//src/test/java=UTF-8
 encoding/<project>=UTF-8
