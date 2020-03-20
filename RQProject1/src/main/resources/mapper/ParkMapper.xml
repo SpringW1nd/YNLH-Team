@@ -40,15 +40,24 @@
     </delete>
     
     <!-- liwen 3/17: bill management -->
-    <insert id="addRegisterBill" parameterType="RegisterBill">
-        insert into RegisterBill(bid, uid, rid, status, fee, plateNumber, parkNumber, entryTime) values (NULL, #{uid}, #{rid}, #{fee}, #{plateNumber}, #{parkNumber}, #{entryTime})
+    <insert id="addRegisterBill" keyProperty="bid" useGeneratedKeys="true" parameterType="RegisterBill">
+        insert into RegisterBill(bid, uid, rid, status, fee, plateNumber, parkNumber, entryTime) values (NULL, #{uid}, #{rid}, #{status}, #{fee}, #{plateNumber}, #{parkNumber}, #{entryTime})
     </insert>
     
-    <select id="completeBill" resultType="RegisterBill">
-          update ParkingSpace set RegisterBill.status=1, 
-                                  RegisterBill.exitTime=#{exitTime},
-                                  RegisterBill.fee=#{fee},
-                                  where RegisterBill.plateNumber = #{plateNumber} and RegisterBill.status = 0
+    <select id="completeBill">
+          update RegisterBill set RegisterBill.status=1, RegisterBill.exitTime=#{exitTime}, RegisterBill.fee=#{fee} where RegisterBill.bid=#{bid}
+    </select>
+    
+    <select id="payBill">
+          update RegisterBill set RegisterBill.status=2 where RegisterBill.bid=#{bid}
+    </select>
+    
+    <select id="findBill" resultType="RegisterBill">
+          select * from RegisterBill where RegisterBill.bid = #{bid}
+    </select>
+    
+    <select id="setExitTime">
+          update RegisterBill set RegisterBill.exitTime=#{exitTime} where RegisterBill.bid=#{bid}
     </select>
     
     <select id="listRegisterBill" resultType="RegisterBill">

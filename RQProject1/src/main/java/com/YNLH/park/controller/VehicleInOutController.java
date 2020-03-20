@@ -8,15 +8,20 @@
 
 package com.YNLH.park.controller;
 
-import java.util.HashMap;
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.YNLH.park.dao.entity.RegisterBill;
 import com.YNLH.park.service.ParkService;
+
+import net.sf.json.JSONObject;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 
 @Controller
@@ -27,26 +32,30 @@ public class VehicleInOutController
 	private ParkService parkService;
 	
 	@RequestMapping("/in")
-	public ModelAndView vehicleIn(@RequestParam("plateNumber")String plateNumber) 
+	@ResponseBody
+	public String vehicleIn(@RequestParam("plateNumber")String plateNumber) 
 	{
-		int entryOk = parkService.vehicleEntry(plateNumber);
-		if (entryOk == 0)
-		{
-			System.out.print("vehicle:" + plateNumber + " entry fail!");
-			return new ModelAndView("vehicleIn", "status", 0);	
-		}
-		else
-		{
-			System.out.print("vehicle:" + plateNumber + " entry fail!");
-			return new ModelAndView("vehicleIn", "status", 1);		
-		}
+		//System.out.print("===> vehicle:" + plateNumber + " try to entry!");
+		JSONObject JsonStr = new JSONObject();
+		JsonStr.put("status", parkService.vehicleEntry(plateNumber));
+		
+		return JsonStr.toString();
 	}
 	
-	@RequestMapping("/out")
-	public ModelAndView vehicleOut(@RequestParam("plateNumber")String plateNumber) 
+	private String DateToString(Date date) 
 	{
-		HashMap<String, Object> BillInfo = new HashMap<String, Object>();
+        DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+ 
+        return sdf.format(date);
+    }
+	
+	@RequestMapping("/out")
+	@ResponseBody
+	public String vehicleOut(@RequestParam("plateNumber")String plateNumber) 
+	{
+		System.out.print("===> vehicle:" + plateNumber + " try to exit!");
 		
+		JSONObject BillInfo = new JSONObject();		
 		BillInfo.put("platNumber", plateNumber);
 		
 		RegisterBill regBill = parkService.vehicleExit(plateNumber);
@@ -62,16 +71,38 @@ public class VehicleInOutController
 		{
 			BillInfo.put("bid", regBill.getBid());
 			BillInfo.put("fee", regBill.getFee());
-			BillInfo.put("entryTime", regBill.getEntryTime());
-			BillInfo.put("exitTime",  regBill.getExitTime());
+			System.out.println (new Timestamp (regBill.getEntryTime().getTime()));
+			BillInfo.put("entryTime", DateToString (regBill.getEntryTime()));
+			BillInfo.put("exitTime",  DateToString (regBill.getExitTime()));
 		}
 		
-		return new ModelAndView("vehicleOut", "BillInfo", BillInfo);
+		return BillInfo.toString();
 	}
 	
-	@RequestMapping("/payed")
-	public ModelAndView vehiclePayed(@RequestParam("bid")int bid) 
+	@RequestMapping("/pay")
+	@ResponseBody
+	public String vehiclePay(@RequestParam("bid")int bid) 
 	{
-		return new ModelAndView("vehiclePayed", "payed", parkService.payBill(bid));
+		JSONObject Payed = new JSONObject();
+		Payed.put("payed", parkService.payBill(bid));
+		return Payed.toString();
+	}
+	
+	@RequestMapping("/is-payed")
+	@ResponseBody
+	public String vehiclePayed(@RequestParam("bid")int bid) 
+	{
+		JSONObject Payed = new JSONObject();
+		Payed.put("payed", parkService.isBillPayed(bid));
+		return Payed.toString();
+	}
+	
+	@RequestMapping("/set-exit-time")
+	@ResponseBody
+	public String vehiclePayed(@RequestParam("plateNumber")String plateNumber, @RequestParam("Hours")int Hours) 
+	{
+		JSONObject Payed = new JSONObject();
+		Payed.put("status", parkService.setExitTime(plateNumber, Hours));
+		return Payed.toString();
 	}
 }

@@ -186,11 +186,12 @@ public class ParkServiceImpl implements ParkService
 		}
 		catch (Exception e)
 		{
+			System.out.println(e);
 			return null;		
 		}		
 	}
 	
-	private RegisterBill findActiveBill(ParkMapper parkMapper, String plateNumber)
+	private RegisterBill findActiveBill(String plateNumber)
 	{
 		try
 		{    
@@ -198,6 +199,7 @@ public class ParkServiceImpl implements ParkService
 		}
 		catch (Exception e)
 		{
+			System.out.println(e);
 			return null;		
 		}
 	}
@@ -212,14 +214,13 @@ public class ParkServiceImpl implements ParkService
 	    return hours;
 	}
 	
-	private RegisterBill completeBill(ParkMapper parkMapper, RegisterBill regBill)
+	private double completeBill(RegisterBill regBill)
 	{
+		double fee = 0;	
+		
 		try
-		{  
-			double fee = 0;
-			Date exitDate = new Date ();
-			
-			double parkTime = getPakringTime (regBill.getEntryTime(), exitDate); 
+		{  		
+			double parkTime = getPakringTime (regBill.getEntryTime(), regBill.getExitTime());
 			
 			if (regBill.getRid() != 0)
 			{
@@ -232,17 +233,49 @@ public class ParkServiceImpl implements ParkService
 			}
 			
 			/* update bill to database */
-		    return parkMapper.completeBill(regBill.getPlateNumber(), exitDate, fee);
+		    parkMapper.completeBill(regBill.getBid(), fee, regBill.getExitTime());
 		}
 		catch (Exception e)
 		{
-			return null;		
+			System.out.println(e);	
 		}
+		
+		return fee;
 	}
 	
 	public boolean payBill(int bid)
 	{
-	    return true;
+		try
+		{ 
+			parkMapper.payBill(bid);
+			return true;
+		}
+		catch (Exception e)
+		{
+			System.out.println(e);
+			return false;
+		}
+	}
+	
+	public boolean isBillPayed(int bid)
+	{
+		try
+		{ 
+			RegisterBill regBill = parkMapper.findBill(bid);
+			if (regBill.getStatus() == 2)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println(e);
+			return false;
+		}	
 	}
 	
 	public List<RegisterBill> listBill(String account)
@@ -258,7 +291,8 @@ public class ParkServiceImpl implements ParkService
 		List<ParkingSpace> setPs = parkMapper.getIdleParking();
 		if (setPs == null)
 		{
-			return 0;
+			// for debug
+			return 10;
 		}
 		
 		return setPs.size();
@@ -267,7 +301,17 @@ public class ParkServiceImpl implements ParkService
 	public List<ParkingSpace> getIdleParkSet()
 	{
 		return parkMapper.getIdleParking();		
-	}	
+	}
+	
+	public int AddParking(int level, String parkNumber)
+	{
+		return 1;
+	}
+	
+	public int UpdateParkingStatus(int level, String parkNumber, int status)
+	{
+		return 1;
+	}
 	/* -------------- liwen 3/17 : park space management end    -------------------- */
 	
 	
@@ -276,6 +320,13 @@ public class ParkServiceImpl implements ParkService
 	{
 		RegisterBill regBill = null;
 		String parkNumber = null;
+		
+		/* check the vehicle */
+		if (findActiveBill (plateNumber) != null)
+		{
+			//System.out.println(plateNumber + "has already entried...");
+			return 0;			
+		}
 		
 		try
 		{
@@ -287,7 +338,9 @@ public class ParkServiceImpl implements ParkService
 				ParkingSpace Ps = parkMapper.allotParking ();
 				if (Ps == null)
 				{
-				    return 0;
+					//for debug
+					Ps = new ParkingSpace (0, "PK001");
+				    //return 0;
 				}
 				
 				parkNumber = Ps.getParkNumber ();
@@ -323,21 +376,43 @@ public class ParkServiceImpl implements ParkService
 	public RegisterBill vehicleExit(String plateNumber)
 	{
 		/*1. find the bill according to the plateNumber */
-		RegisterBill regBill = findActiveBill (parkMapper, plateNumber);
+		RegisterBill regBill = findActiveBill (plateNumber);
 		if (regBill == null)
 		{
 			System.out.println("Get bill fail, plateNumber = " + plateNumber);
 			return null;
 		}
 		
-		/*2. complete the bill */
-		RegisterBill cpBill = completeBill (parkMapper, regBill);
-		if (cpBill == null)
+		if (regBill.getExitTime().getTime() == 0)
 		{
-			System.out.println("complete bill fail, plateNumber = " + plateNumber + "bill-id = " + regBill.getBid());
+			regBill.setExitTime(new Date());
 		}
 		
-		return cpBill;
+		/*2. complete the bill */
+		double fee = completeBill (regBill);
+		regBill.setFee(fee);
+		
+		return regBill;
+	}
+	
+	public boolean setExitTime(String plateNumber, int Hours)
+	{
+		try
+		{ 
+			RegisterBill regBill = findActiveBill (plateNumber);
+			
+			long sec = regBill.getEntryTime().getTime() + Hours * 60 *60 * 1000;	
+			Date exitTime = new Date (sec);
+
+			parkMapper.setExitTime(regBill.getBid(), exitTime);
+			
+			return true;
+		}
+		catch (Exception e)
+		{
+			System.out.println(e);
+			return false;
+		}	
 	}
 	/* -------------- liwen 3/17: vehicle entry/exit process end   -------------------- */
 	

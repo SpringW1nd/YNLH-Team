@@ -25,15 +25,21 @@ public interface ParkService {
 	/* -------------- liwen 3/17 : park space management begin -------------------- */
 	public int getIdleParkCount();
 	public List<ParkingSpace> getIdleParkSet();
+	public int AddParking(int level, String parkNumber);
+	public int UpdateParkingStatus(int level, String parkNumber, int status);
 	/* -------------- liwen 3/17: park space management end    -------------------- */
 	
 	/* -------------- liwen 3/17: vehicle entry/exit process begin -------------------- */
 	public int vehicleEntry(String plateNumber);
 	public RegisterBill vehicleExit(String plateNumber);
+	
+	/* for debug: set exit time */
+	public boolean setExitTime(String plateNumber, int Hours);
 	/* -------------- liwen 3/17: vehicle entry/exit process end   -------------------- */
 	
 	/* -------------- liwen 3/17: bill management begin   -------------------- */
 	public boolean payBill(int bid);
+	public boolean isBillPayed(int bid);
 	
 	public List<RegisterBill> listBill(String account);
 	
