@@ -58,12 +58,12 @@ public class ReserveController {
 
 		HashMap<String, Object> RevInfo = new HashMap<String, Object>();
 		RevInfo.put("reservationNumber",  Rev.getRid()); 
-		RevInfo.put("email",        Rev.getEmail());  
-		RevInfo.put("name",         Rev.getName());
-		RevInfo.put("RStartDate",   Rev.getStartDate()); 
-		RevInfo.put("REndDate",     Rev.getEndDate()); 
+		RevInfo.put("email",        U.getEmail());  
+		RevInfo.put("name",         U.getName());
+		RevInfo.put("RStartDate",   Rev.getrStartDate()); 
+		RevInfo.put("REndDate",     Rev.getrEndDate()); 
 		RevInfo.put("plateNumber",  Rev.getPlateNumber()); 
-		RevInfo.put("parkspace",    Rev.getParkingSpace()); 
+		RevInfo.put("parkspace",    Rev.getParkNumber()); 
 
 		return new ModelAndView("reservationSuccess", "RevInfo", RevInfo);
 	}
@@ -75,8 +75,12 @@ public class ReserveController {
 		
 		User U = (User) request.getSession(true).getAttribute("user");
 		List<Reservation> RevList = ParkSrv.listReservation(U.getUid());
-		System.out.print("RevList----->"+RevList.size());
-        return new ModelAndView("reservationList", "reservationList", RevList);
+		
+		// todo check RevList == null
+		
+		System.out.print("RevList----->" + RevList.size());
+		return new ModelAndView("reservationList", "reservationList", RevList);
+
 	}
 	
 	@RequestMapping("/cancel")

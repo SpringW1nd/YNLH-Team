@@ -39,36 +39,42 @@
     	delete from Reservation where Reservation.rid = #{rid}
     </delete>
     
-     <insert id="addRegisterBill" parameterType="RegisterBill">
-        insert into RegisterBill(uid,rid,fee) values (#{uid},#{rid},#{fee})
+    <!-- liwen 3/17: bill management -->
+    <insert id="addRegisterBill" parameterType="RegisterBill">
+        insert into RegisterBill(bid, uid, rid, status, fee, plateNumber, parkNumber, entryTime) values (NULL, #{uid}, #{rid}, #{fee}, #{plateNumber}, #{parkNumber}, #{entryTime})
     </insert>
+    
+    <select id="completeBill" resultType="RegisterBill">
+          update ParkingSpace set RegisterBill.status=1, 
+                                  RegisterBill.exitTime=#{exitTime},
+                                  RegisterBill.fee=#{fee},
+                                  where RegisterBill.plateNumber = #{plateNumber} and RegisterBill.status = 0
+    </select>
     
     <select id="listRegisterBill" resultType="RegisterBill">
           select * from RegisterBill where RegisterBill.uid = #{uid}
     </select>
     
-    <select id="findRegisterBill" resultType="RegisterBill">
-          select * from RegisterBill where RegisterBill.rid = #{rid}
+    <select id="findActiveBill" resultType="RegisterBill">
+          select * from RegisterBill where RegisterBill.plateNumber = #{plateNumber} and RegisterBill.status = 0
     </select>
     
     <delete id = "deleteRegisterBill" >
     	delete from RegisterBill where RegisterBill.rid = #{rid}
     </delete>
     
-    <delete id = "deleteWalkInUser" >
-    	delete from WalkInUser where WalkInUser.wid = #{wid}
-    </delete>
-    
-    <insert id="addWalkInUser" parameterType="WalkInUser">
-        insert into WalkInUser(wid,plateNumber,wStartDate) values (NULL,#{plateNumber},#{wStartDate})
-    </insert>
-    
-    <select id="findWalkInUser" resultType="WalkInUser">
-          select * from WalkInUser where WalkInUser.plateNumber = #{plateNumber}
+    <!-- liwen 3/17: Parking Space management -->
+    <select id="allotParking" resultType="ParkingSpace">
+          select * from ParkingSpace where ParkingSpace.status = 0 limit 1
     </select>
     
+    <select id="updateParking">
+          update ParkingSpace set ParkingSpace.status=#{status} where ParkingSpace.level = #{level} and ParkingSpace.parkNumber = #{parkNumber}
+    </select>
     
-    
+    <select id="getIdleParking" resultType="ParkingSpace">
+          select * from ParkingSpace where ParkingSpace.status = 0
+    </select>
     
     
 

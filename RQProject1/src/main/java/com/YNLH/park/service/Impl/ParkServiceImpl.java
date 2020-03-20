@@ -13,25 +13,13 @@ import com.YNLH.park.dao.mapper.*;
 import com.YNLH.park.service.*;
 
 @Service
-public class ParkServiceImpl implements ParkService{
+public class ParkServiceImpl implements ParkService
+{
 	//logger
 	private final static Logger logger = Logger.getLogger(ParkServiceImpl.class);
-	private ParkingSpace groundLevel;
-	private ParkingSpace higherLevel;
 	
-	ParkServiceImpl()
-	{
-		groundLevel=new ParkingSpace();
-		higherLevel=new ParkingSpace();
-		
-		groundLevel.setLevel(1);
-		groundLevel.setAvailableNum(10);
-		
-		higherLevel.setLevel(2);
-		higherLevel.setAvailableNum(20);
-	}
-	
-
+	private static ApplicationContext appCtx = new ClassPathXmlApplicationContext("applicationContext.xml");
+	private static ParkMapper parkMapper = appCtx.getBean(ParkMapper.class);
 	
 	public RegisterPlateNumber addRegisterPlateNumber(int uid, String plateNumber)
 	{
@@ -97,37 +85,35 @@ public class ParkServiceImpl implements ParkService{
 		
 		int uid=user.getUid();
 		
-		
-		if(this.higherLevel.getAvailableNum()>0)
+		/* get ParkSpace */
+		ParkingSpace Ps = parkMapper.allotParking ();
+		if (Ps == null)
 		{
+			// to do
+		}
+		else
+		{
+			/* Update parking Status */
+			// todo 
+			
 			Reservation reservation=new Reservation();
 			reservation.setUid(uid);
-			reservation.setStartDate(rStartDate);
-			reservation.setEndDate(rEndDate);
 			reservation.setPlateNumber(plateNumber);
-			reservation.setName(user.getName());
-			reservation.setEmail(user.getEmail());
-			reservation.setPhone(user.getPhone());
-			reservation.setParkingSpace("201");
+			reservation.setParkNumber("x201");
+			reservation.setrStartDate(rStartDate);
+			reservation.setrEndDate(rEndDate);
 			int rid=0;
 			
-			try{
+			try
+			{
 				rid=parkMapper.makeReservation(reservation);		//rid=1 success, 0 fail
 				rid = reservation.getRid();
-			}catch(Exception e) {}
-			
-			//this.addRegisterPlateNumber(uid, plateNumber);
-			
-			this.higherLevel.setAvailableNum(higherLevel.getAvailableNum()-1);
-//			
-//			reservation=this.findReservationByPlateNumber(plateNumber);
-//			rid=reservation.getRid();
-			
-			long minute=rEndDate.getTime()-rStartDate.getTime();
-			this.addRegisterBill(uid,rid,minute*0.02/1000.0/60.0);		//fee rate: 0.02
+			}
+			catch(Exception e) {}
 			
 			return reservation;
 		}
+
 		return null;
 	}
 	
@@ -175,174 +161,184 @@ public class ParkServiceImpl implements ParkService{
 		}
 		else
 		{
-			this.higherLevel.setAvailableNum(higherLevel.getAvailableNum()+1);
-			this.deleteRegisterBill(rid);
+			/* update Parking Space */
+			// to do 
+			
 			try {
 				parkMapper.cancelReservation(rid);
 			}catch(Exception e) {}
 		}
 		return true;
 	}
-	public RegisterBill addRegisterBill(int uid,int rid,double fee)
+	
+	/* -------------- liwen 3/17: bill management begin   -------------------- */
+	private RegisterBill initBill(int rid, int uid, 
+			                      String plateNumber, String parkNumber, 
+			                      Date entryTime, Date exitTime)
 	{
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
-		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
-		RegisterBill registerBill=new RegisterBill();
-		registerBill.setUid(uid);
-		registerBill.setRid(rid);
-		registerBill.setFee(fee);
+		RegisterBill regBill = new RegisterBill (rid, uid, plateNumber, parkNumber, entryTime, exitTime);
 		
-		int bid=0;
-		try {
-			bid=parkMapper.addRegisterBill(registerBill);
-		}catch(Exception e) {}
-		registerBill.setBid(bid);
-		return registerBill;
-		
-	}
-	public List<RegisterBill> listRegisterBill(String account)
-	{
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
-		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
-		
-		UserServiceImpl service=new UserServiceImpl();
-		User user=service.findUser(account);
-		
-		int uid=user.getUid();
-		
-		List<RegisterBill> bills=null;
-		try{
-			bills=parkMapper.listRegisterBill(uid);
-		}catch(Exception e) {}
-		return bills;
-	}
-	public RegisterBill findRegisterBill(int rid)
-	{
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
-		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
-		RegisterBill registerBill=null;
-		try{
-			registerBill=parkMapper.findRegisterBill(rid);
-		}catch(Exception e) {}
-		return registerBill;
+		try
+		{
+			parkMapper.addRegisterBill(regBill);
+		    
+		    return regBill;
+		}
+		catch (Exception e)
+		{
+			return null;		
+		}		
 	}
 	
-	public boolean deleteRegisterBill(int rid)
+	private RegisterBill findActiveBill(ParkMapper parkMapper, String plateNumber)
 	{
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
-		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
-		
-		/*if(findRegisterBill(rid)==null)
-		{
-			return false;
+		try
+		{    
+		    return parkMapper.findActiveBill(plateNumber);
 		}
-		else
-		{	
-		*/
-		try {
-				parkMapper.deleteRegisterBill(rid);
-			}catch(Exception e) {}
-		//}
-		return true;
-	}
-	public boolean registerUserIn(String plateNumber,Date time)
-	{
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
-		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
-		
-		Reservation reservation=this.findReservationByPlateNumber(plateNumber);
-		if(reservation!=null)
+		catch (Exception e)
 		{
+			return null;		
+		}
+	}
+	
+	private double getPakringTime (Date entryTime, Date exitTime)
+	{
+		long diff = exitTime.getTime() - entryTime.getTime();
+	    double days = diff / (1000 * 60 * 60 * 24);  
+	   
+	    double hours = (diff - days*(1000 * 60 * 60 * 24))/(1000* 60 * 60.0);
+	    
+	    return hours;
+	}
+	
+	private RegisterBill completeBill(ParkMapper parkMapper, RegisterBill regBill)
+	{
+		try
+		{  
+			double fee = 0;
+			Date exitDate = new Date ();
 			
-			if(reservation.getStartDate().getTime()<time.getTime()&&reservation.getEndDate().getTime()>time.getTime())
+			double parkTime = getPakringTime (regBill.getEntryTime(), exitDate); 
+			
+			if (regBill.getRid() != 0)
 			{
-				return true;
+				/* vip user: the charging strategy need to be considered */
+				fee = 5 * parkTime;
 			}
-			return false;
+			else
+			{
+				fee = 10 * parkTime;
+			}
+			
+			/* update bill to database */
+		    return parkMapper.completeBill(regBill.getPlateNumber(), exitDate, fee);
 		}
-		else
+		catch (Exception e)
 		{
-			return false;
+			return null;		
 		}
 	}
 	
-	public void registerUserOut(String plateNumber, Date time)
+	public boolean payBill(int bid)
 	{
-		this.higherLevel.setAvailableNum(higherLevel.getAvailableNum()+1);
-		Reservation reservation=this.findReservationByPlateNumber(plateNumber);
-		if(reservation.getEndDate().getTime()<time.getTime())		//time out
+	    return true;
+	}
+	
+	public List<RegisterBill> listBill(String account)
+	{
+		return null;
+	}
+	/* -------------- liwen 3/17: bill management begin   -------------------- */
+	
+	
+	/* -------------- liwen 3/17 : park space management begin -------------------- */
+	public int getIdleParkCount()
+	{
+		List<ParkingSpace> setPs = parkMapper.getIdleParking();
+		if (setPs == null)
 		{
-			long diff=time.getTime()-reservation.getEndDate().getTime()/1000/60;
-			RegisterBill registerBill=this.findRegisterBill(reservation.getRid());
-			this.deleteRegisterBill(registerBill.getRid());
-			registerBill.setFee(registerBill.getFee()+0.03*diff);
-			this.addRegisterBill(registerBill.getUid(), registerBill.getRid(), registerBill.getFee());
+			return 0;
+		}
+		
+		return setPs.size();
+	}
+
+	public List<ParkingSpace> getIdleParkSet()
+	{
+		return parkMapper.getIdleParking();		
+	}	
+	/* -------------- liwen 3/17 : park space management end    -------------------- */
+	
+	
+	/* -------------- liwen 3/17: vehicle entry/exit process begin ----------------- */
+	public int vehicleEntry(String plateNumber)
+	{
+		RegisterBill regBill = null;
+		String parkNumber = null;
+		
+		try
+		{
+			/*1. check if exist reservation */
+			Reservation Rev = parkMapper.findReservationByPlateNumber (plateNumber);
+			if (Rev == null)
+			{
+				/*2.1 process as normal user, and try to allot a parking */
+				ParkingSpace Ps = parkMapper.allotParking ();
+				if (Ps == null)
+				{
+				    return 0;
+				}
+				
+				parkNumber = Ps.getParkNumber ();
+				
+				/*3. initialize a bill */
+				regBill = initBill (0, 0, plateNumber, parkNumber, new Date(), null);
+			}
+			else
+			{
+				/*2.2 process as vip user, get the parking from reservation */
+				parkNumber = Rev.getParkNumber();
+				
+				/*3. initialize a bill */
+				regBill = initBill (Rev.getRid(), Rev.getUid(), 
+						            plateNumber, parkNumber, new Date(), null);
+			}
+			
+			if (regBill == null)
+			{
+				System.out.println("initialize regBill fail!!!!");
+				return 0;
+			}
+			
+			return 1;
+		}
+		catch (Exception e)
+		{
+			System.out.println("findReservationByPlateNumber exception!!!!");
+			return 0;
 		}
 	}
-	public boolean payBill(int rid)
-	{
-		RegisterBill registerBill=this.findRegisterBill(rid);
-		this.deleteRegisterBill(rid);
-		registerBill.setFee(0);
-		this.addRegisterBill(registerBill.getUid(), registerBill.getRid(), registerBill.getFee());
-		return true;
-	}
 	
-	public int showGroundAvailable()
+	public RegisterBill vehicleExit(String plateNumber)
 	{
-		return this.groundLevel.getAvailableNum();
+		/*1. find the bill according to the plateNumber */
+		RegisterBill regBill = findActiveBill (parkMapper, plateNumber);
+		if (regBill == null)
+		{
+			System.out.println("Get bill fail, plateNumber = " + plateNumber);
+			return null;
+		}
+		
+		/*2. complete the bill */
+		RegisterBill cpBill = completeBill (parkMapper, regBill);
+		if (cpBill == null)
+		{
+			System.out.println("complete bill fail, plateNumber = " + plateNumber + "bill-id = " + regBill.getBid());
+		}
+		
+		return cpBill;
 	}
-	public int showResAvailable()
-	{
-		return this.higherLevel.getAvailableNum();
-	}
-	
-	public WalkInUser walkUserIn(String plateNumber, Date wStartDate)
-	{
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
-		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
-		
-		WalkInUser walkInUser=new WalkInUser();
-		walkInUser.setPlateNumber(plateNumber);
-		walkInUser.setStartDate(wStartDate);
-		int wid=0;
-		try {
-			wid=parkMapper.addWalkInUser(walkInUser);
-		}catch(Exception e) {}
-		return walkInUser;
-		
-	}
-	
-	public WalkInUser findWalkInUser(String plateNumber)
-	{
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
-		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
-		
-		WalkInUser walkInUser=null;
-		try{
-			walkInUser=parkMapper.findWalkInUser(plateNumber);
-		}catch(Exception e) {}
-		return walkInUser;
-		
-	}
-	
-	public double walkUserOut(String plateNumber, Date wEndDate)
-	{
-		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
-		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
-		
-		WalkInUser walkInUser=findWalkInUser(plateNumber);
-		if(walkInUser==null)
-			return 0.0;
-		walkInUser.setEndDate(wEndDate);
-		double fee=(walkInUser.getEndDate().getTime()-walkInUser.getStartDate().getTime())/1000.0/60.0*0.03; //0.03 fee rate
-		try {
-			parkMapper.deleteWalkInUser(walkInUser.getWid());
-		}catch(Exception e) {}
-		return fee;
-		
-	}
-	
-	
+	/* -------------- liwen 3/17: vehicle entry/exit process end   -------------------- */
 	
 }

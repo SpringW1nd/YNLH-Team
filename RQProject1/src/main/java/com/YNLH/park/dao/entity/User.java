@@ -7,7 +7,7 @@ public class User {
 	private String name;
 	private String email;
 	private String phone;
-	
+	private String plateNumber;
 	
 	public int getUid() {
 		return uid;
@@ -44,6 +44,16 @@ public class User {
 	}
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+	
+	public String getPlateNumber() 
+	{
+		return plateNumber;
+	}
+	
+	public void setPlateNumber(String plateNumber) 
+	{
+		this.plateNumber = plateNumber;
 	}
 	
 }
