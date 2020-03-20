@@ -38,12 +38,13 @@ public interface ParkMapper {
 	public void setExitTime(@Param("bid") int bid, @Param("exitTime")Date exitTime) throws Exception;
 	
 	public List<RegisterBill> listRegisterBill(int uid) throws Exception;
-	public boolean deleteRegisterBill(int rid);
+	public boolean deleteRegisterBill(int rid) throws Exception;
 	/* ---------------------- liwen 3/17: bill management -----------------*/
 	
 	/* ---------------------- liwen 3/17: Parking Space management -----------------*/
 	public ParkingSpace allotParking();
-	public void updateParking(int level, String parkNumber, int status);
+	public ParkingSpace findParking(String parkNumber);
+	public void updateParking(ParkingSpace Ps);
 	public List<ParkingSpace> getIdleParking();
 	/* ---------------------- liwen 3/17: Parking Space management -----------------*/
 	

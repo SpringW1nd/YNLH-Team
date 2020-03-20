@@ -18,13 +18,11 @@
     </select>
     
     <insert id="makeReservation" keyProperty="rid" useGeneratedKeys="true" parameterType="Reservation">
-        insert into Reservation(uid,rStartDate,rEndDate,plateNumber) values (#{uid},#{rStartDate},#{rEndDate},#{plateNumber})
+        insert into Reservation(rid,uid,rStartDate,rEndDate,plateNumber,parkNumber) values (NULL,#{uid},#{rStartDate},#{rEndDate},#{plateNumber},#{parkNumber})
     </insert>
     
     <select id="listReservation" resultType="Reservation">
-          select Reservation.rid, Reservation.rStartDate, Reservation.rEndDate,Reservation.plateNumber,
-          User.uid, User.account,User.password,User.name,User.email,User.phone from Reservation,User where Reservation.uid = User.uid
-          and User.uid = #{uid}
+          select * from Reservation where Reservation.uid = #{uid}
     </select>
     	
      <select id="findReservation" resultType="Reservation">
@@ -74,12 +72,16 @@
     
     <!-- liwen 3/17: Parking Space management -->
     <select id="allotParking" resultType="ParkingSpace">
-          select * from ParkingSpace where ParkingSpace.status = 0 limit 1
+          select * from ParkingSpace where ParkingSpace.status=0 limit 1;
     </select>
     
-    <select id="updateParking">
-          update ParkingSpace set ParkingSpace.status=#{status} where ParkingSpace.level = #{level} and ParkingSpace.parkNumber = #{parkNumber}
+        <select id="findParking" resultType="ParkingSpace">
+          select * from ParkingSpace where ParkingSpace.parkNumber=#{parkNumber};
     </select>
+    
+    <update id="updateParking">
+          update ParkingSpace set ParkingSpace.status=#{status} where ParkingSpace.level = #{level} and ParkingSpace.parkNumber = #{parkNumber}
+    </update>
     
     <select id="getIdleParking" resultType="ParkingSpace">
           select * from ParkingSpace where ParkingSpace.status = 0

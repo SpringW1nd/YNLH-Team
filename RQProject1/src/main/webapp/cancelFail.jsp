@@ -3,7 +3,6 @@
 <html lang="zh-CN">
   <head>
   	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-  	<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,7 +16,7 @@
     <title>Bootstrap 101 Template</title>
     <!-- Bootstrap -->
     <link href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
-
+	<link rel="stylesheet" href="bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
     <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
     <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
     <!--[if lt IE 9]>
@@ -38,8 +37,8 @@
     	}
     </style>
     <script type="text/javascript">
-    	function goToMakeReservation(){
-    		$(location).attr('href', 'reservation/makeReservation');
+    	function backToMainPage(){
+    		$(location).attr('href', 'user/login?username=123&password=123');
     	}
     	function sighout(){
 			$(location).attr('href', 'user/sighout');
@@ -54,6 +53,8 @@
     <script src="jquery/jquery.min.js"></script>
     <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
     <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="bower_components/moment/min/moment.min.js"></script>
+    <script type="text/javascript" src="bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 	<div class="container-fluid outer" >
 		<div class="row header	" >
 			<div class="col-md-2" >
@@ -79,75 +80,11 @@
 				
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-md-1" >
-			</div>
-			<div class="col-md-10" >
-			<div class="panel panel-default" style="height: 100%;">
-				<div class="panel-heading">Reservation List</div>
-				<div class="panel-body">
-					<div class="row text-right" style="margin:15px 0 0 0;">
-						<button type="button" class="btn btn-default" onClick="goToMakeReservation();">Make a Reservation</button>
-					</div>
-					<div class="row" style="margin:15px 0 0 0; ">
-						<table class="table table-hover">
-							<tr>
-								<td>Reservation Number</td>
-								<td>Start From</td>
-								<td>End To</td>
-								<td>Plate Number</td>
-								<td>Park Number</td>
-							</tr>
-							<c:forEach var="item" items="${reservationList}">
-								<tr>
-									<td><c:out value="${item.rid}"></c:out></td>
-									<td><c:out value="${item.rStartDate}"></c:out></td>
-									<td><c:out value="${item.rEndDate}"></c:out></td>
-									<td><c:out value="${item.plateNumber}"></c:out></td>
-									<td><c:out value="${item.parkNumber}"></c:out></td>
-								</tr>
-							</c:forEach>
-							
-
-							<!-- 
-							<tr class="danger">
-								<td><a>123</a></td>
-								<td>3/12/2020</td>
-								<td>Max</td>
-								<td>123123</td>
-								<td>509123456</td>
-								<td>Cancel</td>
-							</tr>
-							<tr class="success">
-								<td><a>123</a></td>
-								<td>3/13/2020</td>
-								<td>Max</td>
-								<td>123123</td>
-								<td>509123456</td>
-								<td>Active</td>
-							</tr>
-							<tr class="info">
-								<td><a>123</a></td>
-								<td>3/14/2020</td>
-								<td>Max</td>
-								<td>123123</td>
-								<td>509123456</td>
-								<td>Reservated</td>
-							</tr>
-							 -->
-						</table>		
-					</div>
-					<form type="post" action="reservation/cancel">
-						<input list="numberList" class="form-control" id="reservationNumber" name="reservationNumber" placeholder="reservationNumber to cancel"  type="text">
-						<div class="col-md-2"><button type="submit" class="btn btn-default">Submit</button></div>
-					</form>
-				</div>
-			</div>
-			</div>
-			<div class="col-md-1" >
-			</div>
+		<div class="alert alert-info alert-dismissible" role="alert">
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		  <strong>Cancel Failure!</strong>
 		</div>
+		
 	</div>
-    
   </body>
 </html>

@@ -93,13 +93,13 @@ public class ParkServiceImpl implements ParkService
 		}
 		else
 		{
-			/* Update parking Status */
-			// todo 
+			Ps.setStatus(1);
+ 			parkMapper.updateParking(Ps);
 			
 			Reservation reservation=new Reservation();
 			reservation.setUid(uid);
 			reservation.setPlateNumber(plateNumber);
-			reservation.setParkNumber("x201");
+			reservation.setParkNumber(Ps.getParkNumber());
 			reservation.setrStartDate(rStartDate);
 			reservation.setrEndDate(rEndDate);
 			int rid=0;
@@ -111,7 +111,7 @@ public class ParkServiceImpl implements ParkService
 			}
 			catch(Exception e) {}
 			
-			return reservation;
+ 			return reservation;
 		}
 
 		return null;
@@ -155,12 +155,16 @@ public class ParkServiceImpl implements ParkService
 	{
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		ParkMapper parkMapper = ctx.getBean(ParkMapper.class);
-		if(findReservation(rid)==null)
+		Reservation reservation = findReservation(rid);
+		if(reservation==null)
 		{
 			return false;
 		}
 		else
 		{
+			ParkingSpace Ps = parkMapper.findParking(reservation.getParkNumber());
+			Ps.setStatus(0);
+			parkMapper.updateParking(Ps);
 			/* update Parking Space */
 			// to do 
 			
