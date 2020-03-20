@@ -89,7 +89,7 @@ public class ParkServiceImpl implements ParkService
 		ParkingSpace Ps = parkMapper.allotParking ();
 		if (Ps == null)
 		{
-			// to do
+			return null;
 		}
 		else
 		{
@@ -114,7 +114,6 @@ public class ParkServiceImpl implements ParkService
  			return reservation;
 		}
 
-		return null;
 	}
 	
 	public List<Reservation> listReservation(int uid)
