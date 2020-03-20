@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.YNLH.park.dao.entity.RegisterBill;
-import com.YNLH.park.service.ParkService;
+import com.YNLH.park.service.VehicleService;
+import com.YNLH.park.service.BillService;
 
 import net.sf.json.JSONObject;
 import java.sql.Timestamp;
@@ -29,7 +30,10 @@ import java.text.SimpleDateFormat;
 public class VehicleInOutController 
 {
 	@Autowired
-	private ParkService parkService;
+	private VehicleService vehicleService;
+	
+	@Autowired
+	private BillService billService;
 	
 	@RequestMapping("/in")
 	@ResponseBody
@@ -37,7 +41,7 @@ public class VehicleInOutController
 	{
 		//System.out.print("===> vehicle:" + plateNumber + " try to entry!");
 		JSONObject JsonStr = new JSONObject();
-		JsonStr.put("status", parkService.vehicleEntry(plateNumber));
+		JsonStr.put("status", vehicleService.vehicleEntry(plateNumber));
 		
 		return JsonStr.toString();
 	}
@@ -58,7 +62,7 @@ public class VehicleInOutController
 		JSONObject BillInfo = new JSONObject();		
 		BillInfo.put("platNumber", plateNumber);
 		
-		RegisterBill regBill = parkService.vehicleExit(plateNumber);
+		RegisterBill regBill = vehicleService.vehicleExit(plateNumber);
 		if (regBill == null)
 		{
 			/* get no bill, let it go */
@@ -84,7 +88,7 @@ public class VehicleInOutController
 	public String vehiclePay(@RequestParam("bid")int bid) 
 	{
 		JSONObject Payed = new JSONObject();
-		Payed.put("payed", parkService.payBill(bid));
+		Payed.put("payed", billService.payBill(bid));
 		return Payed.toString();
 	}
 	
@@ -93,7 +97,7 @@ public class VehicleInOutController
 	public String vehiclePayed(@RequestParam("bid")int bid) 
 	{
 		JSONObject Payed = new JSONObject();
-		Payed.put("payed", parkService.isBillPayed(bid));
+		Payed.put("payed", billService.isBillPayed(bid));
 		return Payed.toString();
 	}
 	
@@ -102,7 +106,7 @@ public class VehicleInOutController
 	public String vehiclePayed(@RequestParam("plateNumber")String plateNumber, @RequestParam("Hours")int Hours) 
 	{
 		JSONObject Payed = new JSONObject();
-		Payed.put("status", parkService.setExitTime(plateNumber, Hours));
+		Payed.put("status", vehicleService.setExitTime(plateNumber, Hours));
 		return Payed.toString();
 	}
 }

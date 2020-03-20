@@ -4,31 +4,35 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.YNLH.park.dao.entity.RegisterBill;
-import com.YNLH.park.service.ParkService;
+import com.YNLH.park.service.VehicleService;
+import com.YNLH.park.service.BillService;
 
 public class VehicleInOutTest extends BaseTestForSpring
 {
 	@Autowired
-	private ParkService parkService;
+	private VehicleService vehicleService;
+	
+	@Autowired
+	private BillService billService;
 	
 	@Test
 	public void vehicleTest() 
 	{
 		String plateNumber = "XA00YN78";
 		
-		int result = parkService.vehicleEntry(plateNumber);
+		int result = vehicleService.vehicleEntry(plateNumber);
 		assert (result == 1);
 		
-		result = parkService.vehicleEntry(plateNumber);
+		result = vehicleService.vehicleEntry(plateNumber);
 		assert (result == 0);
 		
-		parkService.setExitTime(plateNumber, 3);
+		vehicleService.setExitTime(plateNumber, 3);
 		
-		RegisterBill regBill = parkService.vehicleExit(plateNumber);
+		RegisterBill regBill = vehicleService.vehicleExit(plateNumber);
 		assert (regBill != null);
 		
-		parkService.payBill(regBill.getBid());
-		assert (parkService.isBillPayed(regBill.getBid()) == true);
+		billService.payBill(regBill.getBid());
+		assert (billService.isBillPayed(regBill.getBid()) == true);
 		
 		System.out.print("vehicleTest success!!!");
 	}
