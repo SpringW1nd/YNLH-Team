@@ -45,9 +45,7 @@ class VehicleServiceImpl implements VehicleService
 				ParkingSpace Ps = parkMapper.allotParking ();
 				if (Ps == null)
 				{
-					//for debug
-					Ps = new ParkingSpace (0, "PK001");
-				    //return 0;
+				    return 0;
 				}
 				
 				parkNumber = Ps.getParkNumber ();
@@ -75,7 +73,7 @@ class VehicleServiceImpl implements VehicleService
 		}
 		catch (Exception e)
 		{
-			System.out.println("findReservationByPlateNumber exception!!!!");
+			System.out.println(e);
 			return 0;
 		}
 	}

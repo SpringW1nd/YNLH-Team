@@ -8,7 +8,7 @@ public interface ParkingService
 {
 	public int getIdleParkCount();
 	public List<ParkingSpace> getIdleParkSet();
-	public int AddParking(int level, String parkNumber);
+	public int AddParking(ParkingSpace Ps);
 	public int UpdateParkingStatus(int level, String parkNumber, int status);
 
 }

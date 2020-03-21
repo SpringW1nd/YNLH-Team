@@ -4,6 +4,7 @@
 #* Description: simulate vehicle entry
 #********************************************
 import json
+from time import sleep
 from lib.EESensor import EESensor
 
 class Vehicle ():
@@ -15,34 +16,39 @@ class Vehicle ():
         Sensor = EESensor()
 
         #1. simulate vehicle entry
-        print ("===> " + self.PlateNumber + " try to entry..");
+        print ("===> vehicle " + self.PlateNumber + " try to entry..");
         IsEntry = Sensor.Entry (self.PlateNumber)
         if (IsEntry == 1):
-            print ("===> " + self.PlateNumber + " entry success..");
+            print ("===> vehicle " + self.PlateNumber + " entry success..");
         else:
-            print ("===> " + self.PlateNumber + " entry fail..");
+            print ("===> vehicle " + self.PlateNumber + " entry fail..");
             return
             
         #2. modify the exit time
+        Sensor.SetExitTime (self.PlateNumber)
         
         #3. simulate vehicle exit
         BillInfo = Sensor.Exit (self.PlateNumber)
         if (BillInfo == None):
             return
-        print ("===> " + PlateNumber + "exit: " + \
-               "Bid: " + Results["bid"] + " "\
-               "Fee: " + Results["fee"] + " "\
-               "EntryTime: " + Results["entryTime"] + " "\
-               "ExitTime: " + Results["exitTime"] + " ");
+        print ("===> vehicle " + self.PlateNumber + " exit: [" + \
+               "Bid: " + str(BillInfo["bid"]) + " "\
+               "Fee: " + str(BillInfo["fee"]) + " "\
+               "EntryTime: " + str(BillInfo["entryTime"]) + " "\
+               "ExitTime: " + str(BillInfo["exitTime"]) + "]");
                
-        #4. simulate checking pay status
+        #4. simulate pay the bill
+        Sensor.Pay (BillInfo["bid"])
+        print ("===> vehicle " + self.PlateNumber + " pays the bill..")
+               
+        #5. simulate checking pay status
         while (1):
-            IsPayed = Sensor.IsPayed (Results["bid"])
+            IsPayed = Sensor.IsPayed (BillInfo["bid"])
             if (IsPayed == 0):
                 sleep(1)
             else:
                 break
-        print ("===> " + PlateNumber + " exit success..") 
+        print ("===> vehicle " + self.PlateNumber + " exit success..") 
 
         
         

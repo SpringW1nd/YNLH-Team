@@ -1,5 +1,10 @@
 package com.YNLH.park.service.Impl;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.List;
 
@@ -8,6 +13,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
 import com.YNLH.park.dao.entity.RegisterBill;
+import com.YNLH.park.dao.entity.User;
 import com.YNLH.park.dao.mapper.ParkMapper;
 import com.YNLH.park.service.BillService;
 
@@ -16,6 +22,42 @@ public class BillServiceImpl implements BillService
 {
 	private static ApplicationContext appCtx = new ClassPathXmlApplicationContext("applicationContext.xml");
 	private static ParkMapper parkMapper = appCtx.getBean(ParkMapper.class);
+	
+	private int normalPrice = 10;
+	private int vipPrice = 5;
+	
+	private void readParkingPrice ()
+	{
+		File file = new File("/RQProject1/src/main/resources/parkingcharge.properties");
+
+		try
+		{
+			
+			InputStreamReader reader = new InputStreamReader(this.getClass().getResourceAsStream("/parkingcharge.properties"));			
+			BufferedReader bfReader = new BufferedReader(reader); 
+            String line = ""; 
+            while ((line = bfReader.readLine()) != null) 
+            {
+            	String value = line.substring(line.indexOf("=")+1);
+                
+                if (line.indexOf("normal") != -1)
+                {	
+                	normalPrice = Integer.parseInt(value);
+                }
+                else if (line.indexOf("vip") != -1)
+                {
+                	vipPrice = Integer.parseInt(value);
+                }
+            } 
+            
+            bfReader.close();
+		}
+		catch (Exception e)
+		{
+			System.out.println(e);
+			return;		
+		}	
+	}
 	
 	public RegisterBill initBill(int rid, int uid, 
                                  String plateNumber, String parkNumber, 
@@ -62,19 +104,21 @@ public class BillServiceImpl implements BillService
 	public double completeBill(RegisterBill regBill)
 	{
 		double fee = 0;	
-
+		readParkingPrice ();
+		
 		try
 		{  		
 			double parkTime = getPakringTime (regBill.getEntryTime(), regBill.getExitTime());
 
+			//System.out.print("vipPrice = " + vipPrice + ",  normalPrice = " + normalPrice);
 			if (regBill.getRid() != 0)
 			{
 				/* vip user: the charging strategy need to be considered */
-				fee = 5 * parkTime;
+				fee = vipPrice * parkTime;
 			}
 			else
 			{
-				fee = 10 * parkTime;
+				fee = normalPrice * parkTime;
 			}
 
 			/* update bill to database */
@@ -125,6 +169,24 @@ public class BillServiceImpl implements BillService
 
 	public List<RegisterBill> listBill(String account)
 	{
-		return null;
+		UserServiceImpl userService = new UserServiceImpl();
+		
+		User user = userService.findUser(account);
+		if (user == null)
+		{
+			return null;
+		}
+		
+		try
+		{
+			List<RegisterBill> billList = parkMapper.listRegisterBill(user.getUid());
+			
+			return billList;
+		}
+		catch (Exception e)
+		{
+			System.out.println(e);
+			return null;
+		}
 	}
 }

@@ -20,8 +20,7 @@ public class ParkingServiceImpl
 		List<ParkingSpace> setPs = parkMapper.getIdleParking();
 		if (setPs == null)
 		{
-			// for debug
-			return 10;
+			return 0;
 		}
 		
 		return setPs.size();

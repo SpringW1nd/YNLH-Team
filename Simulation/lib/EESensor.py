@@ -4,6 +4,7 @@
 #* Description: simulate vehicle entry
 #********************************************
 import json
+import random
 from lib.Message import Message
 
 class EESensor ():
@@ -14,9 +15,10 @@ class EESensor ():
 
         self.ActBase = "/vehicle"
 
+# data format: username=hello&password=123&comfirmPw=123&name=liwen&phoneNumber=123456&email=11%40qq.com
     def Entry (self, PlateNumber):
         Action  = self.ActBase + "/in"
-        Datas   = json.dumps({"plateNumber": PlateNumber})
+        Datas   = "plateNumber="+PlateNumber
         Results = EESensor.MsgHandle.SendRequest ("post", Action, Data=Datas)
         if (Results == None):
             return 0
@@ -24,19 +26,35 @@ class EESensor ():
 
     def Exit (self, PlateNumber):
         Action  = self.ActBase + "/out"
-        Datas   = json.dumps({"plateNumber": PlateNumber})
+        Datas   = "plateNumber="+PlateNumber
+        Results = EESensor.MsgHandle.SendRequest ("post", Action, Data=Datas)
+        if (Results == None):
+            return None        
+        return Results
+        
+    def Pay (self, Bid):
+        Action  = self.ActBase + "/pay"
+        Datas   = "bid="+str(Bid)
         Results = EESensor.MsgHandle.SendRequest ("post", Action, Data=Datas)
         if (Results == None):
             return None        
         return Results
         
     def IsPayed (self, Bid):
-        Action  = self.ActBase + "payed/"
-        Datas   = json.dumps({"bid": Bid})
+        Action  = self.ActBase + "/is-payed"
+        Datas   = "bid="+str(Bid)
         Results = EESensor.MsgHandle.SendRequest ("post", Action, Data=Datas)
         if (Results == None):
             return 0
         return Results["payed"]
+        
+    def SetExitTime (self, PlateNumber):
+        Action  = self.ActBase + "/set-exit-time"
+        Datas   = "plateNumber="+PlateNumber + "&Hours=" + str(random.randint(1,24))
+        Results = EESensor.MsgHandle.SendRequest ("post", Action, Data=Datas)
+        if (Results == None):
+            return None        
+        return Results["status"]
 
 
     
