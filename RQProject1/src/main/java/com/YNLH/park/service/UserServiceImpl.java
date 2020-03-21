@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
 		try {
 			user=userMapper.findUser(account);
 		}
-		catch
+		catch(Exception e)
 		{
 			return null;
 		}
