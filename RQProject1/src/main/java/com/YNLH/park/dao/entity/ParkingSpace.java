@@ -5,6 +5,15 @@ public class ParkingSpace {
 	private String parkNumber;
 	private int status;
 	
+	public ParkingSpace () {}
+	
+	public ParkingSpace (int level, String parkNumber) 
+	{
+		this.level = level;
+		this.parkNumber = parkNumber;
+		this.status = 0;
+	}
+	
 	public int getLevel()
 	{
 		return level;

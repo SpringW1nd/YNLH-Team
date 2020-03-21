@@ -13,6 +13,27 @@ public class Reservation {
 	private String plateNumber;
 	private String parkNumber;
 
+	public int getRid()
+	{
+		return rid;
+	}
+	
+	public void setRid(int rid)
+	{
+		this.rid=rid;
+	}
+	
+	
+	public int getUid()
+	{
+		return uid;
+	}
+	public void setUid(int uid)
+	{
+		this.uid=uid;
+	}
+	
+	
 	public Date getrStartDate() 
 	{
 		return rStartDate;
@@ -33,15 +54,6 @@ public class Reservation {
 		this.rEndDate = rEndDate;
 	}
 	
-	public int getRid()
-	{
-		return rid;
-	}
-	
-	public void setRid(int rid)
-	{
-		this.rid=rid;
-	}
 	
 	public String getPlateNumber()
 	{
@@ -52,15 +64,7 @@ public class Reservation {
 	{
 		this.plateNumber=plateNumber;
 	}
-	
-	public int getUid()
-	{
-		return uid;
-	}
-	public void setUid(int uid)
-	{
-		this.uid=uid;
-	}
+
 	
 	public String getParkNumber() 
 	{

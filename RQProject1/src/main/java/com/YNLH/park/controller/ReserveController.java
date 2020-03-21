@@ -90,11 +90,11 @@ public class ReserveController {
 		boolean IsCancel = ParkSrv.cancelReservation(ReserveId);
 		if (IsCancel)
 		{
-			return new ModelAndView("Cancel", "Status", true);
+			return new ModelAndView("cancelSuccess", "Status", true);
 		}
 		else
 		{
-			return new ModelAndView("Cancel", "Status", false);
+			return new ModelAndView("cancelFail", "Status", false);
 		}	
 	}
 }
