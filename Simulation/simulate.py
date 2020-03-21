@@ -55,7 +55,7 @@ def main(argv):
     if (Type == "vehicle"):
         SimulateVehicle(VehicleCount)
     else:
-        print ("run.py -s <all/collect/repostats/langstats/discripstats/topics>")  
+        print ("simulate.py -t <type_name>")  
    
 
 if __name__ == "__main__":
