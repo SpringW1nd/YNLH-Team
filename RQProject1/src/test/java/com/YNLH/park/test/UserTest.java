@@ -22,4 +22,24 @@ public class UserTest extends BaseTestForSpring{
 		}
 		System.out.print(u.getAccount());
 	}
+	@Test
+	public void registerUsertest()
+	{
+		assert (userService.registerUser("test1", "123456", "test1", "","") != null);
+		assert (userService.registerUser("test1", "123456", "test1", "","") == null);
+		assert (userService.registerUser("test2", "123456", "test1", "h@wsu.edu","5099832123") != null);
+		assert (userService.registerUser("", "", "", "","") == null);
+		System.out.print("registertest success`");
+	}
+	@Test
+	public void logintest()
+	{
+		User u1 = userService.login("hongkl","123456");
+		assert (u1 != null);
+		User u2 = userService.login("hongkl","123");
+		assert (u2 == null);
+		User u3 = userService.login("","");
+		assert (u3 == null);
+		System.out.print("logintest success`");
+	}
 }
