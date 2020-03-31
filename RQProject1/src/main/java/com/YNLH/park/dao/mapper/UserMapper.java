@@ -10,7 +10,7 @@ public interface UserMapper {
 	public int registerUser(User user);
 	public int insertUser(User user);
 	public List<User> selectAllUser();
-	public User findUser(String account) throws Exception;
-	public User findUserById(int uid) throws Exception;
+	public User findUser(String account);
+	public User findUserById(int uid);
 	public User login(User user) throws Exception;
 }
