@@ -41,6 +41,7 @@ class VehicleServiceImpl implements VehicleService
 			Reservation Rev = parkMapper.findReservationByPlateNumber (plateNumber);
 			if (Rev == null)
 			{
+				System.out.println("Cannot find rev");
 				/*2.1 process as normal user, and try to allot a parking */
 				ParkingSpace Ps = parkMapper.allotParking ();
 				if (Ps == null)
@@ -55,6 +56,7 @@ class VehicleServiceImpl implements VehicleService
 			}
 			else
 			{
+				System.out.println("Find rev");
 				/*2.2 process as vip user, get the parking from reservation */
 				parkNumber = Rev.getParkNumber();
 				
