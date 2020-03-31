@@ -69,6 +69,7 @@ public class UserController {
 		{
 			String eformat = "\\p{Alpha}\\w{2,15}[@][a-z0-9]{3,}[.]\\p{Lower}{2,}"; // email format
 			String pformat = "^[0-9]+(.[0-9]+)?$"; // phone format
+			
 			//User U = userService.registerUser(username, password, name, email, phone);
 			//emall can be null, but if email is not null, it must be the correct email format.
 			//password and comfirm password must be the same and name cannot be empty
@@ -77,6 +78,13 @@ public class UserController {
 				return new ModelAndView("registerFail");
 			}
 			User U = userService.registerUser(username, password, name, email, phone);
+			if (U == null)			//account exists
+			{
+				return new ModelAndView("registerFail");
+			}
+
+			
+			
 			
 		}
 		catch(Exception e)
