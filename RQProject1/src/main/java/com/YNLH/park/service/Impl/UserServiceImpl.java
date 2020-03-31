@@ -23,23 +23,23 @@ public class UserServiceImpl implements UserService {
 	{
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
 		UserMapper userMapper = ctx.getBean(UserMapper.class);
+		if(userMapper.findUser(account) != null)		//Judge whether the user exists
+		{
+			System.out.println("account existed");
+			return null;
+		}
 		
-		//if(!userMapper.findUser(account)*)
-		//{
-			//Jump to register failed page
-		//}
 		int uid=0;
 		User user = new User();
-		user.setUid(0);					//The uid we be set in the database automatically
 		user.setAccount(account);
 		user.setPassword(password);
 		user.setName(name);
 		user.setEmail(email);
 		user.setPhone(phone);
-		user.setPlateNumber ("0101");
-		
+		//user.setPlateNumber ("0101");
 		System.out.println("start registerUser !");
 		uid = userMapper.registerUser(user);		//return the uid of the new account	
+		System.out.println("start registerUser !"+ uid);
 		return user;
 		
 	}
@@ -58,10 +58,13 @@ public class UserServiceImpl implements UserService {
 		User user=null;
 		try {
 			user=userMapper.findUser(account);
+			return user;
 		}
 		catch(Exception e)
-		{}
-		return user;
+		{
+			return null;
+		}
+		
 	}
 	public User findUserById(int uid)
 	{
