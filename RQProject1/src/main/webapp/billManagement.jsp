@@ -38,9 +38,7 @@
     	}
     </style>
     <script type="text/javascript">
-    	function goToMakeReservation(){
-    		$(location).attr('href', 'reservation/makeReservation');
-    	}
+    	
     	function sighout(){
 			$(location).attr('href', 'user/sighout');
 			
@@ -61,11 +59,9 @@
 			</div>
 			<div class="col-md-9" style="padding: 10px 0 0 0;">
 				<ul class="nav nav-pills">
-				  <li role="presentation " ><a class="navigation" href="user/login?username=123&password=123">Home</a></li>
-				  <li role="presentation " class="active"><a>Reservation</a></li>
-				  <li role="presentation "><a class="navigation" href="aaa/aab?username=123&password=123">Contract</a></li>
-				  <li role="presentation "><a class="navigation" href="aaa/aab?username=123&password=123">Bill</a></li>
-				  <li role="presentation "><a class="navigation" href="operation/operationMain">Operation</a></li>
+				  <li role="presentation " ><a class="navigation" href="manager/managerPage">Parking Space</a></li>
+				  <li role="presentation " ><a class="navigation" href="manager/userManagement">User Management</a></li>
+				  <li role="presentation " class="active"><a>Bill Management</a></li>
 				</ul>
 			</div>
 			<div class="col-md-1">
@@ -84,35 +80,36 @@
 			</div>
 			<div class="col-md-10" >
 			<div class="panel panel-default" style="height: 100%;">
-				<div class="panel-heading">Reservation List</div>
+				<div class="panel-heading">Bill List</div>
 				<div class="panel-body">
-					<div class="row text-right" style="margin:15px 0 0 0;">
-						<button type="button" class="btn btn-default" onClick="goToMakeReservation();">Make a Reservation</button>
-					</div>
+					
 					<div class="row" style="margin:15px 0 0 0; ">
 						<table class="table table-hover">
 							<tr>
-								<td>Reservation Number</td>
-								<td>Start From</td>
-								<td>End To</td>
+								<td>Bill id</td>
+								<td>Reservation id</td>
+								<td>User id</td>
 								<td>Plate Number</td>
-								<td>Park Number</td>
+								<td>Enter Time</td>
+								<td>Exit Time</td>
+								<td>Fee</td>
+								<td>ParkNumber</td>
 							</tr>
-							<c:forEach var="item" items="${reservationList}">
+							<c:forEach var="item" items="${resultList}">
 								<tr>
+									<td><c:out value="${item.bid}"></c:out></td>
 									<td><c:out value="${item.rid}"></c:out></td>
-									<td><c:out value="${item.rStartDate}"></c:out></td>
-									<td><c:out value="${item.rEndDate}"></c:out></td>
+									<td><c:out value="${item.uid}"></c:out></td>
 									<td><c:out value="${item.plateNumber}"></c:out></td>
+									<td><c:out value="${item.entryTime}"></c:out></td>
+									<td><c:out value="${item.exitTime}"></c:out></td>
+									<td><c:out value="${item.fee}"></c:out></td>
 									<td><c:out value="${item.parkNumber}"></c:out></td>
 								</tr>
 							</c:forEach>
 						</table>		
 					</div>
-					<form type="post" action="reservation/cancel">
-						<input list="numberList" class="form-control" id="reservationNumber" name="reservationNumber" placeholder="reservationNumber to cancel"  type="text">
-						<div class="col-md-2"><button type="submit" class="btn btn-default">Submit</button></div>
-					</form>
+					
 				</div>
 			</div>
 			</div>

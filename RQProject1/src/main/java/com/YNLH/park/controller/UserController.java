@@ -34,7 +34,7 @@ public class UserController {
 				U = userService.login(username, password);
 				if (U == null)
 				{
-					return new ModelAndView("index","LoginFlag","0");
+					return new ModelAndView("index","LoginFlag","-1");
 				}
 			}
 			catch(Exception e)

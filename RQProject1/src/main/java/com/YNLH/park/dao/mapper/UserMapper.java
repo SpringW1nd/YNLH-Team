@@ -13,4 +13,5 @@ public interface UserMapper {
 	public User findUser(String account) throws Exception;
 	public User findUserById(int uid) throws Exception;
 	public User login(User user) throws Exception;
+	public int updateUser(User user);
 }

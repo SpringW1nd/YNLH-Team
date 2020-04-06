@@ -31,14 +31,8 @@
     	.content{height :100%;  position: relative; padding:0 0 0;}
     </style>
     <script>
-    	function goToManager(){
-    		$(location).attr('href', 'manager/goToMangerLogin');
-    		
-    	}
-    	function goToRegisteration(){
-    		$(location).attr('href', 'user/goTORegisteration');
-    		
-    	}
+    
+
     </script>
   </head>
   <body>
@@ -54,27 +48,10 @@
 			<div class="col-md-2" >
 				<img src="img/wsu-home-logo.svg" class="img-responsive" alt="Responsive image">
 			</div>
-			<div class="col-md-8" >
+			<div class="col-md-9" >
 				
 			</div>
 			<div class="col-md-1">
-				<ul class="nav nav-pills">
-					<li role="presentation" class="dropdown">
-						 <a class="dropdown-toggle" data-toggle="dropdown" onClick="goToManager();" role="button" aria-haspopup="true" aria-expanded="false">
-						 	manager
-						 </a>
-					</li>
-				</ul>
-				
-			</div>
-			<div class="col-md-1">
-				<ul class="nav nav-pills">
-					<li role="presentation" class="dropdown">
-						 <a class="dropdown-toggle" data-toggle="dropdown" onClick="goToRegisteration();" role="button" aria-haspopup="true" aria-expanded="false">
-						 	sigh up
-						 </a>
-					</li>
-				</ul>
 				
 			</div>
 		</div>
@@ -102,10 +79,10 @@
 		</div>
 		<div class="row main" >
 			<div class="col-md-4 side" >
-				<form method="post" action="user/login">
+				<form method="post" action="manager/login">
 					<div class="bs-example pager center-block" data-example-id="basic-forms" style="color:white;padding: 30px 10px 30px 15px;border-radius: 11px;background-color: #292929;margin: 80px 10px 10px 10px;">
 						<div class="row text-left">
-							<h4>Registed User:</h4>
+							<h4>Manager:</h4>
 						</div>
 						<div class="form-group text-left">
 						    <label for="username">Username</label>

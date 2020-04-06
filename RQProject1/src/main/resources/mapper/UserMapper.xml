@@ -18,6 +18,14 @@
     </select>
 <!-- 下面是鹏飞上次的xml, registeruser 和我之间写的重复了-->
 	 
+	 <update id="updateUser" parameterType = "User">
+	 	update User set account = #{account}, 
+	 	name= #{name} , 
+	 	email=#{email}, 
+	 	phone=#{phone}, 
+	 	plateNumber = #{plateNumber} 
+	 	where uid=#{uid};
+	 </update>
      <!-- paramerType：java自定义类型或数据类型-->
     <insert id="insertUser" parameterType="User">
         insert into user(uid,name,type) values (#{uid},#{name},#{type})

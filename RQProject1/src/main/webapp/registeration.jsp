@@ -33,6 +33,14 @@
     	function goBackIndex(){
         		$(location).attr('href', '');
     	}
+    	function submitFrom(){
+    		if($("#password").val()!=$("#comfirmPw").val()){
+    			alert("The password entered twice is inconsistent!!");
+    		}else{
+    			$("form").submit();
+    		}
+    		
+    	}
     </script>
   </head>
   <body>
@@ -126,7 +134,7 @@
   								<div class="row">
   									<div class="col-md-2"></div>
   									<div class="col-md-2"></div>
-  									<div class="col-md-2"><button type="submit" class="btn btn-default">Submit</button></div>
+  									<div class="col-md-2"><button type="button" onclick="submitFrom();" class="btn btn-default">Submit</button></div>
   									<div class="col-md-2"><button type="button" class="btn btn-default" onClick="goBackIndex();">Cancle</button></div>
   									<div class="col-md-2"></div>
   									<div class="col-md-2"></div>

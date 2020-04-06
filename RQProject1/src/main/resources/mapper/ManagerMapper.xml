@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--命名空间是对应接口的包名+类名 -->
+<mapper namespace="com.YNLH.park.dao.mapper.ManagerMapper">
+    <!-- paramerType：java自定义类型或数据类型-->
+    <select id="login" resultType="Manager">
+          select mid,account,password,name,email,phone from Manager where (Manager.account = #{param1} and Manager.password = #{param2})
+    </select>
+    <select id="selectParkingSpace" resultType="ParkingSpace" parameterType="ParkingSpace">
+    	select a.*,User.account,User.name,User.email,User.phone,User.plateNumber from 
+    	(select ParkingSpace.parkNumber,ParkingSpace.level,ParkingSpace.status,Reservation.rid,Reservation.rStartDate,
+    	Reservation.rEndDate,Reservation.plateNumber,Reservation.uid from ParkingSpace 
+    	left join Reservation on ParkingSpace.parkNumber = Reservation.parkNumber) a left join User on a.uid=User.uid
+    	where 1=1
+    	<if test="parkNumber!=-1"> and parkNumber=#{parkNumber}</if>;
+    </select>
+    <select id="selectAllRegisterBill" resultType="RegisterBill">
+          select * from RegisterBill
+    </select>
+    
+</mapper>

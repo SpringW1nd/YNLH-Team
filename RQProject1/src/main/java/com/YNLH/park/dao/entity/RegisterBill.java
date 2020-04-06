@@ -15,7 +15,6 @@ public class RegisterBill {
 	
 	private Date entryTime;
 	private Date exitTime;
-	
 	public RegisterBill ()
 	{
 		
