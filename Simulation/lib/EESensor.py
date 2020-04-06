@@ -9,7 +9,7 @@ from lib.Message import Message
 
 class EESensor ():
     
-    MsgHandle = Message ("http://192.168.132.1:8080/RQProject1")
+    MsgHandle = Message ("http://localhost:8080/RQProject1")
     
     def __init__(self):
 

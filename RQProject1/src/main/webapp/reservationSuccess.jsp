@@ -92,7 +92,7 @@
 					<div class="panel-heading">Reservation Information</div>
 					<div class="panel-body">
 						<h3>${RevInfo.name},Thank you for your reservation!</h3>
-						<p>Reservatin number: ${RevInfo.reservationNumber }</p>
+						<p>Reservation number: ${RevInfo.reservationNumber }</p>
 						<p>Email: ${RevInfo.email}</p>
 						<p>Plate Number: ${RevInfo.plateNumber}</p>
 						<p>Parking space: ${RevInfo.parkspace}</p>
