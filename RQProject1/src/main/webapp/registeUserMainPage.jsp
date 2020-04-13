@@ -61,9 +61,7 @@
 				<ul class="nav nav-pills">
 				  <li role="presentation " class="active"><a>Home</a></li>
 				  <li role="presentation "><a class="navigation" href="reservation/reservationList">Reservation</a></li>
-				  <li role="presentation "><a class="navigation" href="aaa/aab?username=123&password=123">Contract</a></li>
 				  <li role="presentation "><a class="navigation" href="aaa/aab?username=123&password=123">Bill</a></li>
-				  <li role="presentation "><a class="navigation" href="operation/operationMain">Operation</a></li>
 				</ul>
 			</div>
 			<div class="col-md-1">

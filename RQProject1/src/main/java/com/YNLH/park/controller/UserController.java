@@ -62,7 +62,8 @@ public class UserController {
 			                         @RequestParam("comfirmPw") String comfirmPw, 
 			                         @RequestParam("name") String name, 
 			                         @RequestParam("email") String email, 
-			                         @RequestParam("phoneNumber") String phone)
+			                         @RequestParam("phoneNumber") String phone,
+			                         HttpServletRequest request)
 	{
 	
 		try
@@ -73,13 +74,14 @@ public class UserController {
 			//User U = userService.registerUser(username, password, name, email, phone);
 			//emall can be null, but if email is not null, it must be the correct email format.
 			//password and comfirm password must be the same and name cannot be empty
-			if (username == null|| password == null ||  !password.equals(comfirmPw) || name.isEmpty() || (!email.isEmpty() && !email.matches(eformat))|| (!phone.isEmpty() && !phone.matches(pformat)))  
-			{
-				return new ModelAndView("registerFail");
-			}
+//			if (username == null|| password == null ||  !password.equals(comfirmPw) || name.isEmpty() || (!email.isEmpty() && !email.matches(eformat))|| (!phone.isEmpty() && !phone.matches(pformat)))  
+//			{
+//				return new ModelAndView("registerFail");
+//			}
 			User U = userService.registerUser(username, password, name, email, phone);
 			if (U == null)			//account exists
 			{
+				
 				return new ModelAndView("registerFail");
 			}
 
@@ -92,7 +94,7 @@ public class UserController {
 			return new ModelAndView("registerFail");
 		}
 		
-		return new ModelAndView("registeUserMainPage");
+		return new ModelAndView("index");
 	}
 	
 	

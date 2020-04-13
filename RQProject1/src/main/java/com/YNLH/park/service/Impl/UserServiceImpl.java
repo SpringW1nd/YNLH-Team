@@ -40,6 +40,7 @@ public class UserServiceImpl implements UserService {
 		System.out.println("start registerUser !");
 		uid = userMapper.registerUser(user);		//return the uid of the new account	
 		System.out.println("start registerUser !"+ uid);
+		user.setUid(uid);
 		return user;
 		
 	}
