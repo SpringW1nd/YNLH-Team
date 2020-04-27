@@ -65,6 +65,7 @@ public class ManagerServicelmpl implements ManagerService {
 			user = userMapper.findUserById(uid);
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("exception in selectUserByuid:"+e.getMessage());
 		}
 		return user;
 	}

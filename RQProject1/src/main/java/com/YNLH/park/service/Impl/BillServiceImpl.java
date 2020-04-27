@@ -8,10 +8,12 @@ import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
+import com.YNLH.park.controller.ManagerControl;
 import com.YNLH.park.dao.entity.RegisterBill;
 import com.YNLH.park.dao.entity.User;
 import com.YNLH.park.dao.mapper.ParkMapper;
@@ -22,7 +24,7 @@ public class BillServiceImpl implements BillService
 {
 	private static ApplicationContext appCtx = new ClassPathXmlApplicationContext("applicationContext.xml");
 	private static ParkMapper parkMapper = appCtx.getBean(ParkMapper.class);
-	
+	private final static Logger logger = Logger.getLogger(BillServiceImpl.class);
 	private int normalPrice = 10;
 	private int vipPrice = 5;
 	
@@ -54,7 +56,8 @@ public class BillServiceImpl implements BillService
 		}
 		catch (Exception e)
 		{
-			System.out.println(e);
+			e.printStackTrace();
+			logger.error("exception in completeBill:"+e.getMessage());
 			return;		
 		}	
 	}
@@ -73,7 +76,8 @@ public class BillServiceImpl implements BillService
 		}
 		catch (Exception e)
 		{
-			System.out.println(e);
+			e.printStackTrace();
+			logger.error("exception in initBill:"+e.getMessage());
 			return null;		
 		}		
 	}
@@ -86,7 +90,8 @@ public class BillServiceImpl implements BillService
 		}
 		catch (Exception e)
 		{
-			System.out.println(e);
+			e.printStackTrace();
+			logger.error("exception in findActiveBill:"+e.getMessage());
 			return null;		
 		}
 	}
@@ -126,7 +131,8 @@ public class BillServiceImpl implements BillService
 		}
 		catch (Exception e)
 		{
-			System.out.println(e);	
+			e.printStackTrace();
+			logger.error("exception in completeBill:"+e.getMessage());
 		}
 
 		return fee;
@@ -141,7 +147,8 @@ public class BillServiceImpl implements BillService
 		}
 		catch (Exception e)
 		{
-			System.out.println(e);
+			e.printStackTrace();
+			logger.error("exception in payBill:"+e.getMessage());
 			return false;
 		}
 	}
@@ -162,7 +169,8 @@ public class BillServiceImpl implements BillService
 		}
 		catch (Exception e)
 		{
-			System.out.println(e);
+			e.printStackTrace();
+			logger.error("exception in isBillPayed:"+e.getMessage());
 			return false;
 		}	
 	}
@@ -185,7 +193,8 @@ public class BillServiceImpl implements BillService
 		}
 		catch (Exception e)
 		{
-			System.out.println(e);
+			e.printStackTrace();
+			logger.error("exception in listBill:"+e.getMessage());
 			return null;
 		}
 	}

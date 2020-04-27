@@ -63,6 +63,8 @@ public class UserServiceImpl implements UserService {
 		}
 		catch(Exception e)
 		{
+			e.printStackTrace();
+			logger.error("exception in findUser:"+e.getMessage());
 			return null;
 		}
 		
@@ -75,7 +77,10 @@ public class UserServiceImpl implements UserService {
 		try {
 			user=userMapper.findUserById(uid);
 		}
-		catch(Exception e) {}
+		catch(Exception e) {
+			e.printStackTrace();
+			logger.error("exception in findUserById:"+e.getMessage());
+		}
 		return user;
 	}
 	public User login(String account, String password)		
@@ -94,6 +99,7 @@ public class UserServiceImpl implements UserService {
 			user=userMapper.login(userx);
 		}catch(Exception e) {
 			e.printStackTrace();
+			logger.error("exception in login:"+e.getMessage());
 		}
 		
 		return user;

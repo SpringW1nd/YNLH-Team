@@ -2,6 +2,7 @@ package com.YNLH.park.service.Impl;
 
 import java.util.Date;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -19,7 +20,7 @@ class VehicleServiceImpl implements VehicleService
 {
 	private static ApplicationContext appCtx = new ClassPathXmlApplicationContext("applicationContext.xml");
 	private static ParkMapper parkMapper = appCtx.getBean(ParkMapper.class);
-	
+	private final static Logger logger = Logger.getLogger(VehicleService.class);
 	@Autowired
 	BillService billService;
 	
@@ -75,7 +76,8 @@ class VehicleServiceImpl implements VehicleService
 		}
 		catch (Exception e)
 		{
-			System.out.println(e);
+			e.printStackTrace();
+			logger.error("exception in vehicleEntry:"+e.getMessage());
 			return 0;
 		}
 	}
@@ -117,7 +119,8 @@ class VehicleServiceImpl implements VehicleService
 		}
 		catch (Exception e)
 		{
-			System.out.println(e);
+			e.printStackTrace();
+			logger.error("exception in vehicleEntry:"+e.getMessage());
 			return false;
 		}	
 	}

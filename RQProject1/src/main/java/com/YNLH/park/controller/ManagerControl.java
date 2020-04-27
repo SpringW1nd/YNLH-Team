@@ -53,6 +53,7 @@ public class ManagerControl {
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
+					logger.error("exception in login"+e.getMessage());
 					return new ModelAndView("managerLogin","LoginFlag","0");
 				}
 			

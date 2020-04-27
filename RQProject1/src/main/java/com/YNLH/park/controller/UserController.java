@@ -39,6 +39,7 @@ public class UserController {
 			}
 			catch(Exception e)
 			{
+				logger.error("exception in manager login"+e.getMessage());
 				return new ModelAndView("index","LoginFlag","0");
 			}
 			

@@ -35,7 +35,10 @@ public class ParkServiceImpl implements ParkService
 		int pid=0;
 		try {
 			pid = parkMapper.addPlateNumber(registerPlateNumber);			//1 for success. 0 for fail. Not the actual pid 
-		}catch(Exception e) {}
+		}catch(Exception e) {
+			e.printStackTrace();
+			logger.error("exception in addRegisterPlateNumber:"+e.getMessage());
+		}
 			
 		
 		registerPlateNumber.setPid(pid);
@@ -58,7 +61,10 @@ public class ParkServiceImpl implements ParkService
 		
 		try{
 			registerPlateNumbers=parkMapper.listRegisterPlateNumber(uid);
-		}catch(Exception e) {}
+		}catch(Exception e) {
+			e.printStackTrace();
+			logger.error("exception in listRegisterPlateNumber:"+e.getMessage());
+		}
 		
 		return registerPlateNumbers;
 		
@@ -72,7 +78,10 @@ public class ParkServiceImpl implements ParkService
 		RegisterPlateNumber registerPlateNumber=null;
 		try {
 			registerPlateNumber=parkMapper.findRegisterPlateNumber(plateNumber);
-		}catch(Exception e) {}
+		}catch(Exception e) {
+			e.printStackTrace();
+			logger.error("exception in findRegisterPlateNumber:"+e.getMessage());
+		}
 		return registerPlateNumber;
 	}
 
@@ -109,7 +118,10 @@ public class ParkServiceImpl implements ParkService
 				rid=parkMapper.makeReservation(reservation);		//rid=1 success, 0 fail
 				rid = reservation.getRid();
 			}
-			catch(Exception e) {}
+			catch(Exception e) {
+				e.printStackTrace();
+				logger.error("exception in makeReservation:"+e.getMessage());
+			}
 			
  			return reservation;
 		}
@@ -124,7 +136,10 @@ public class ParkServiceImpl implements ParkService
 		List<Reservation> reservations=null;
 		try {
 			reservations=parkMapper.listReservation(uid);
-		}catch(Exception e) {}
+		}catch(Exception e) {
+			e.printStackTrace();
+			logger.error("exception in listReservation:"+e.getMessage());
+		}
 		return reservations;
 		
 	}
@@ -136,7 +151,10 @@ public class ParkServiceImpl implements ParkService
 		Reservation reservation=null;
 		try {
 			reservation=parkMapper.findReservation(rid);
-		}catch(Exception e) {}
+		}catch(Exception e) {
+			e.printStackTrace();
+			logger.error("exception in findReservation:"+e.getMessage());
+		}
 		return reservation;
 	}
 	public Reservation findReservationByPlateNumber(String plateNumber)
@@ -146,7 +164,10 @@ public class ParkServiceImpl implements ParkService
 		Reservation reservation=null;
 		try {
 			reservation=parkMapper.findReservationByPlateNumber(plateNumber);
-		}catch(Exception e) {}
+		}catch(Exception e) {
+			e.printStackTrace();
+			logger.error("exception in findReservationByPlateNumber:"+e.getMessage());
+		}
 		return reservation;
 	}
 	
@@ -169,7 +190,10 @@ public class ParkServiceImpl implements ParkService
 			
 			try {
 				parkMapper.cancelReservation(rid);
-			}catch(Exception e) {}
+			}catch(Exception e) {
+				e.printStackTrace();
+				logger.error("exception in cancelReservation:"+e.getMessage());
+			}
 		}
 		return true;
 	}
